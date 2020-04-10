@@ -1,7 +1,8 @@
-# <img src="https://lh3.googleusercontent.com/proxy/D1fVyP-jEnIRiDTf7aEKb_ux2EZEaQVN1ytzU6mSn3oIN5r_HOjHPfPqUv_xfnkDjpgSGdhUE--3K84x1UL4Qu3OwG8-HdkBvRyPsQ_FM-qDrKT96-KVlFFgdSbFAUU" alt="alt text" width="60" height="35"> BookRec 
+# <img src="https://i.imgur.com/oUiWApo.png" alt="alt text" width="60" height="35"> BookRec 
   
 ### BookRec is a website created for user submitted book recommendations and reviews.
-### https://github.com/cathsu/BookRec
+### [Github Repository](https://github.com/cathsu/BookRec)
+### [Heroku Deployment]()
 **Team Member Information**  <br><br>
 Name: Cathy Hsu    
 Otter ID: hsu2269   
