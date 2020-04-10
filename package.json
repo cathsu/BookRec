@@ -1,0 +1,26 @@
+{
+  "name": "bookrec",
+  "version": "1.0.0",
+  "description": "**Team Member Information**  <br><br>\r Name: Cathy Hsu    \r Otter ID: hsu2269   \r Email Address: chsu@csumb.edu",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cathsu/BookRec.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cathsu/BookRec/issues"
+  },
+  "homepage": "https://github.com/cathsu/BookRec#readme",
+  "dependencies": {
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "lodash": "^4.17.15",
+    "request": "^2.88.2"
+  }
+}
