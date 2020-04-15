@@ -6,38 +6,41 @@
     else {%>
     <div class="row">
         <%results.items.forEach(function(r) {%>
-            <div class="col-sm-6">
-                <div class="card mb-3" style="max-width:450px;">
-                    <div class="row no-gutters">
-                        <!--Image-->
-                        <div class="col-md-4">
-                            <%if (!r.volumeInfo.hasOwnProperty("imageLinks")) {%>
-                                <svg class="bd-placeholder-img" width="105%" height="230" xmlns="http://www.w3.org/2000/svg" 
-                                aria-label="Placeholder: Image" preserveAspectRatio="xMidYMid slice" role="img"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">No Image</text></svg>
-                            <%} else {%>
-                                <img class="bd-placeholder-img" width="105%" height="230" xmlns="http://www.w3.org/2000/svg" aria-label="Placeholder: Image" 
-                                preserveAspectRatio="xMidYMid slice" role="img" src='<%=r.volumeInfo.imageLinks.thumbnail%>'></src>
-                            <%}%>
-                        </div>
-                        <!--Text-->
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <!-- Title -->
-                                <h5 class="card-title"><%=r.volumeInfo.title%></h5>
-                                <!-- Description -->
-                                <p class="card-text">
-                                    Lorem ipsum dolor sit amet, sit et persecuti intellegat, cu quo viris lucilius recteque. Nec ea illum 
-                                </p>
-                                <!-- Button -->
-                                <a href="/results" class="black-text d-flex justify-content-end">
-                                            <h7>Read Reviews <i class="fas fa-angle-double-right"></i></h7>
-                                </a>
+            <!--Remove books from search result with no ISBN number-->
+            <%if (r.volumeInfo.hasOwnProperty("industryIdentifiers")) {%>
+                <div class="col-sm-6">
+                    <div class="card mb-3" style="max-width:450px;">
+                        <div class="row no-gutters">
+                            <!--Image-->
+                            <div class="col-md-4">
+                                <%if (!r.volumeInfo.hasOwnProperty("imageLinks")) {%>
+                                    <svg class="bd-placeholder-img" width="105%" height="230" xmlns="http://www.w3.org/2000/svg" 
+                                    aria-label="Placeholder: Image" preserveAspectRatio="xMidYMid slice" role="img"><title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">No Image</text></svg>
+                                <%} else {%>
+                                    <img class="bd-placeholder-img" width="105%" height="230" xmlns="http://www.w3.org/2000/svg" aria-label="Placeholder: Image" 
+                                    preserveAspectRatio="xMidYMid slice" role="img" src='<%=r.volumeInfo.imageLinks.thumbnail%>'></src>
+                                <%}%>
+                            </div>
+                            <!--Text-->
+                            <div class="col-md-7">
+                                <div class="card-body">
+                                    <!-- Title -->
+                                    <h5 class="card-title" name="title" value="<%=r.volumeInfo.title%>"><%=r.volumeInfo.title%></h5>
+                                    <!-- Description -->
+                                    <p class="card-text">
+                                        <%=r.volumeInfo.description.split(' ').slice(0,20).join(' ')%>...
+                                    </p>
+                                    <!-- Button -->
+                                    <a href="/results/<%=r.volumeInfo.industryIdentifiers[0].identifier%>" class="black-text d-flex justify-content-end">
+                                                <h7>Read Reviews <i class="fas fa-angle-double-right"></i></h7>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            <%}%>
         
         <%});%>
     </div>

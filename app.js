@@ -19,17 +19,18 @@ app.get("/", function(req, res){
 // https://www.googleapis.com/books/v1/volumes?q=intitle:Harry%20Potter+inauthor:JK%20Rowling+subject:  -> books found
 
 app.get("/results", async function(req, res){
-    let results = await getResults(req);
+    let params = getParameters(req); 
+    let results = await getResults(params);
     console.log('in results');
     // console.log(results.hasOwnProperty("imageLinks"));
     let count = 0; 
-    results.items.forEach(function(r) {
-        console.log(r.volumeInfo.hasOwnProperty("imageLinks")); 
-        console.log(count);
-        console.log(r.volumeInfo.title);
+    // results.items.forEach(function(r) {
+    //     console.log(r.volumeInfo.industryIdentifiers[0].hasOwnProperty("identifier")); 
+    //     console.log(count);
+    //     console.log(r.volumeInfo.title);
         
-        count ++; 
-    })
+    //     count ++; 
+    // })
     res.render("results.ejs", {results: results});
 });
 
@@ -41,7 +42,12 @@ app.get("/login", function(req, res){
     res.render("login.ejs");
 });
 
-app.get("/results/:ISBN", function(req, res){
+
+// https://www.googleapis.com/books/v1/volumes?q=subject:student -> [1] has no ISBN
+// https://www.googleapis.com/books/v1/volumes?q=intitle:The%20Distribution%20of%20Mexico%27s%20Public%20Spending%20on%20Education+inauthor:Gladys%20Lopez%20Acevedo+Angel%20Salinas
+app.get("/results/:ISBN", async function(req, res){
+    let result = await getResults('q=isbn'+req.params.ISBN);
+    console.log(result);
     res.render("singleResult.ejs");
 });
 
@@ -84,16 +90,16 @@ function getParameters(req) {
     return params;
 }
 
-function getResults(req) {
+function getResults(params) {
     let URL = 'https://www.googleapis.com/books/v1/volumes?'; 
-    let PARAMS = getParameters(req); 
-    console.log(PARAMS);
+    // let PARAMS = getParameters(req); 
+    // console.log(PARAMS);
     return new Promise(function(resolve, reject) {
-        request(URL + PARAMS, function(error, response, body) {
+        request(URL + params, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 let parsedData = JSON.parse(body);
-                console.log("SUCCESS"); 
-                console.log(parsedData);
+                // console.log("SUCCESS"); 
+                // console.log(parsedData);
                 resolve(parsedData);
             } else {
                 reject(error); 
