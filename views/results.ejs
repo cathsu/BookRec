@@ -26,10 +26,20 @@
                             <div class="col-md-7">
                                 <div class="card-body">
                                     <!-- Title -->
-                                    <h5 class="card-title" name="title" value="<%=r.volumeInfo.title%>"><%=r.volumeInfo.title%></h5>
+                                    <h5 class="card-title" name="title">
+                                        <%let title = "No Title Available"; %>
+                                        <%if (r.volumeInfo.hasOwnProperty("title")) {%>
+                                            <%title=r.volumeInfo.title;%> 
+                                        <%}%>
+                                        <%=title%>
+                                    </h5>
                                     <!-- Description -->
                                     <p class="card-text">
-                                        <%=r.volumeInfo.description.split(' ').slice(0,20).join(' ')%>...
+                                        <%let description = "No synopsis available"; %>
+                                        <%if (r.volumeInfo.hasOwnProperty("description")) {%>
+                                            <%description=r.volumeInfo.description.split(' ').slice(0, 20).join(' ');%> 
+                                        <%}%>
+                                        <%=description%>...
                                     </p>
                                     <!-- Button -->
                                     <a href="/results/<%=r.volumeInfo.industryIdentifiers[0].identifier%>" class="black-text d-flex justify-content-end">
