@@ -6,7 +6,17 @@ const app = express();
 
 app.use(express.static("public"));
 
-var api_key = process.env.book_key;
+const api_key = process.env.book_key;
+const databaseUsername = process.env.user;
+const databasePassword = process.env.pass;
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: databaseUsername,
+    password: databasePassword,
+    database: 'featured_books'
+});
+connection.connect();
 
 //routes
 app.get("/", function(req, res){
@@ -28,6 +38,10 @@ app.get("/login", function(req, res){
 app.get("/results/:ISBN", function(req, res){
     res.render("singleResult.ejs");
 });
+
+app.get("/populateCards", function(req, res) {
+    let 
+})
 
 app.listen(process.env.PORT || port, function(){
     console.log("server is running...");
