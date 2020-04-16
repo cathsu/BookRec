@@ -1,25 +1,25 @@
 <%- include('templates/header') -%>
 <div class="container">
-    <%if (results.totalItems == 0) {%>
+    <%if (books.totalItems == 0) {%>
         <h3 class="text-center">No books found</h3>
     <%}
     else {%>
     <div class="row">
-        <%results.items.forEach(function(r) {%>
+        <%books.items.forEach(function(b) {%>
             <!--Remove books from search result with no ISBN number-->
-            <%if (r.volumeInfo.hasOwnProperty("industryIdentifiers")) {%>
+            <%if (b.volumeInfo.hasOwnProperty("industryIdentifiers")) {%>
                 <div class="col-sm-6">
                     <div class="card mb-3" style="max-width:450px;">
                         <div class="row no-gutters">
                             <!--Image-->
                             <div class="col-md-4">
-                                <%if (!r.volumeInfo.hasOwnProperty("imageLinks")) {%>
+                                <%if (!b.volumeInfo.hasOwnProperty("imageLinks")) {%>
                                     <svg class="bd-placeholder-img" width="105%" height="230" xmlns="http://www.w3.org/2000/svg" 
                                     aria-label="Placeholder: Image" preserveAspectRatio="xMidYMid slice" role="img"><title>Placeholder</title>
                                     <rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">No Image</text></svg>
                                 <%} else {%>
                                     <img class="bd-placeholder-img" width="105%" height="230" xmlns="http://www.w3.org/2000/svg" aria-label="Placeholder: Image" 
-                                    preserveAspectRatio="xMidYMid slice" role="img" src='<%=r.volumeInfo.imageLinks.thumbnail%>'></src>
+                                    preserveAspectRatio="xMidYMid slice" role="img" src='<%=b.volumeInfo.imageLinks.thumbnail%>'></src>
                                 <%}%>
                             </div>
                             <!--Text-->
@@ -28,21 +28,21 @@
                                     <!-- Title -->
                                     <h5 class="card-title" name="title">
                                         <%let title = "No Title Available"; %>
-                                        <%if (r.volumeInfo.hasOwnProperty("title")) {%>
-                                            <%title=r.volumeInfo.title;%> 
+                                        <%if (b.volumeInfo.hasOwnProperty("title")) {%>
+                                            <%title=b.volumeInfo.title;%> 
                                         <%}%>
                                         <%=title%>
                                     </h5>
                                     <!-- Description -->
                                     <p class="card-text">
                                         <%let description = "No synopsis available"; %>
-                                        <%if (r.volumeInfo.hasOwnProperty("description")) {%>
-                                            <%description=r.volumeInfo.description.split(' ').slice(0, 20).join(' ');%> 
+                                        <%if (b.volumeInfo.hasOwnProperty("description")) {%>
+                                            <%description=b.volumeInfo.description.split(' ').slice(0, 20).join(' ');%> 
                                         <%}%>
                                         <%=description%>...
                                     </p>
                                     <!-- Button -->
-                                    <a href="/results/<%=r.volumeInfo.industryIdentifiers[0].identifier%>" class="black-text d-flex justify-content-end">
+                                    <a href="/results/<%=b.volumeInfo.industryIdentifiers[0].identifier%>" class="black-text d-flex justify-content-end">
                                                 <h7>Read Reviews <i class="fas fa-angle-double-right"></i></h7>
                                     </a>
                                 </div>

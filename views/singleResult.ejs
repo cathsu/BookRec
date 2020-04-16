@@ -1,3 +1,26 @@
 <%- include('templates/header') -%>
-
+<div class="container">
+    <!--Title-->
+    <%let title = "No Title Available"; %>
+    <%if (book.volumeInfo.hasOwnProperty("title")) {%>
+        <%title=book.volumeInfo.title;%> 
+    <%}%>
+    <h2 class="text-center"><strong><%=title%></strong></h2>
+    <div class="row justify-content-end">
+        <div class="col-4">
+            <img  src="<%=book.volumeInfo.imageLinks.thumbnail%>">
+        </div>
+        <div class="col-4">
+            <!--Author-->
+            <div>
+                <%if (authors) {%>
+                    <%=authors%>
+                <%} else {%>
+                    No author available
+                <%}%>
+                
+            </div>
+        </div>
+      </div>
+    </div>
 <%- include('templates/footer') -%>

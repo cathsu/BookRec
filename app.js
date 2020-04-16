@@ -20,8 +20,8 @@ app.get("/", function(req, res){
 
 app.get("/results", async function(req, res){
     let params = getParameters(req); 
-    let results = await getResults(params);
-    console.log('in results');
+    let books = await getResults(params);
+    // console.log('in results');
     // console.log(results.hasOwnProperty("imageLinks"));
     let count = 0; 
     // results.items.forEach(function(r) {
@@ -31,7 +31,7 @@ app.get("/results", async function(req, res){
         
     //     count ++; 
     // })
-    res.render("results.ejs", {results: results});
+    res.render("results.ejs", {books: books});
 });
 
 app.get("/signup", function(req, res){
@@ -46,9 +46,14 @@ app.get("/login", function(req, res){
 // https://www.googleapis.com/books/v1/volumes?q=subject:student -> [1] has no ISBN
 // https://www.googleapis.com/books/v1/volumes?q=intitle:The%20Distribution%20of%20Mexico%27s%20Public%20Spending%20on%20Education+inauthor:Gladys%20Lopez%20Acevedo+Angel%20Salinas
 app.get("/results/:ISBN", async function(req, res){
-    let result = await getResults('q=isbn'+req.params.ISBN);
-    console.log(result);
-    res.render("singleResult.ejs");
+    let book = await getResults('q=isbn:'+req.params.ISBN);
+    let authors = null; 
+    if (book.items[0].author) {
+        authors = book.items[0].author.join(', '); 
+    }
+    console.log("after entering isbn...");
+    console.log(book);
+    res.render("singleResult.ejs", {book: book.items[0], authors:authors});
 });
 
 app.listen(process.env.PORT || port, function(){
@@ -98,6 +103,7 @@ function getResults(params) {
         request(URL + params, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 let parsedData = JSON.parse(body);
+                console.log("parameters: " + params);
                 // console.log("SUCCESS"); 
                 // console.log(parsedData);
                 resolve(parsedData);
