@@ -46,20 +46,71 @@ app.get("/login", function(req, res){
 // https://www.googleapis.com/books/v1/volumes?q=subject:student -> [1] has no ISBN
 // https://www.googleapis.com/books/v1/volumes?q=intitle:The%20Distribution%20of%20Mexico%27s%20Public%20Spending%20on%20Education+inauthor:Gladys%20Lopez%20Acevedo+Angel%20Salinas
 app.get("/results/:ISBN", async function(req, res){
-    let book = await getResults('q=isbn:'+req.params.ISBN);
-    let authors = null; 
-    if (book.items[0].author) {
-        authors = book.items[0].author.join(', '); 
-    }
-    console.log("after entering isbn...");
-    console.log(book);
-    res.render("singleResult.ejs", {book: book.items[0], authors:authors});
+    let results = await getResults('q=isbn:'+req.params.ISBN);
+    console.log(results);
+    let book =  await getBookInfo(results.items[0]); 
+    console.log(JSON.stringify(book));
+    // res.render("singleResult.ejs", );
 });
 
 app.listen(process.env.PORT || port, function(){
     console.log("server is running...");
 });
 
+
+function getBookInfo(result) {
+    let title = "No title available";
+    let authors = "No author available";
+    let publisher = "No publisher available"; 
+    let publishedDate = "No data available";
+    let synopsis = "No synopsis available"; 
+    let subject = "No subject available"; 
+    let pageCount = "No page count available"; 
+    
+    console.log("fine"); 
+    let book = {
+        title: title, 
+        authors: authors, 
+        publisher: publisher, 
+        publishedDate: publishedDate, 
+        subject: subject, 
+        pageCount: pageCount, 
+        synopsis: synopsis
+    }; 
+    
+    console.log(JSON.stringify(book)); 
+    console.log(result);
+    console.log(result.volumeInfo.hasOwnProperty("title")); 
+    if (result.volumeInfo.hasOwnProperty("title")) {
+        book.title = result.volumeInfo.title; 
+    }
+    if (result.volumeInfo.hasOwnProperty("authors")) {
+        book.authors = result.volumeInfo.authors.join(', ');     
+    }
+    if (result.volumeInfo.hasOwnProperty("publisher")) {
+        book.publisher = result.volumeInfo.publisher;
+    }
+    if (result.volumeInfo.hasOwnProperty("publishedDate")) {
+        book.publishedDate = result.volumeInfo.publishedDate;
+    }
+    if (result.volumeInfo.hasOwnProperty("categories")) {
+        book.subject = result.volumeInfo.categories.join(", ");
+    }
+    if (result.volumeInfo.hasOwnProperty("pageCount")) {
+        book.pageCount = result.volumeInfo.pageCount;
+    }
+    if (result.volumeInfo.hasOwnProperty("description")) {
+        book.synopsis = result.volumeInfo.synopsis;
+    }
+    console.log(JSON.stringify(book));
+    return new Promise(function(resolve, reject) {
+        if (true) {
+            resolve(book); 
+        } else {
+            reject("Error");
+        }
+    }); //Promise 
+}
 
 // empty text input: intitle:+inauthor:+subject:
 function getParameters(req) {

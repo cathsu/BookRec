@@ -7,7 +7,8 @@
     <div class="row">
         <%books.items.forEach(function(b) {%>
             <!--Remove books from search result with no ISBN number-->
-            <%if (b.volumeInfo.hasOwnProperty("industryIdentifiers")) {%>
+            <%if (b.volumeInfo.hasOwnProperty("industryIdentifiers") && 
+                (b.volumeInfo.industryIdentifiers[0].type == "ISBN_10" || b.volumeInfo.industryIdentifiers[0].type == "ISBN_13")) {%>
                 <div class="col-sm-6">
                     <div class="card mb-3" style="max-width:450px;">
                         <div class="row no-gutters">
@@ -51,7 +52,6 @@
                     </div>
                 </div>
             <%}%>
-        
         <%});%>
     </div>
     <%}%>
