@@ -85,10 +85,10 @@ function getBookInfo(result) {
         synopsis: synopsis
     }; 
     
-    console.log("BOOK BOOK BOOK BOOK BOOK"); 
-    console.log(JSON.stringify(book)); 
-    console.log(result);
-    console.log(result.volumeInfo.hasOwnProperty("title")); 
+    // console.log("BOOK BOOK BOOK BOOK BOOK"); 
+    // console.log(JSON.stringify(book)); 
+    // console.log(result);
+    // console.log(result.volumeInfo.hasOwnProperty("title")); 
     if (result.volumeInfo.hasOwnProperty("imageLinks") && result.volumeInfo.imageLinks.hasOwnProperty("thumbnail")) {
         book.cover = result.volumeInfo.imageLinks.thumbnail;    
     }
@@ -178,7 +178,7 @@ function getResults(params) {
         request(URL + params, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 let parsedData = JSON.parse(body);
-                console.log("parameters: " + params);
+                // console.log("parameters: " + params);
                 // console.log("SUCCESS"); 
                 // console.log(parsedData);
                 resolve(parsedData);
