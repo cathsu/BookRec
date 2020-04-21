@@ -49,8 +49,9 @@ app.get("/results/:ISBN", async function(req, res){
     let results = await getResults('q=isbn:'+req.params.ISBN);
     console.log(results);
     let book =  await getBookInfo(results.items[0]); 
-    console.log(JSON.stringify(book));
-    // res.render("singleResult.ejs", );
+    // console.log(JSON.stringify(book));
+    console.log(book);
+    res.render("singleResult.ejs", {book: book});
 });
 
 app.listen(process.env.PORT || port, function(){
@@ -59,28 +60,38 @@ app.listen(process.env.PORT || port, function(){
 
 
 function getBookInfo(result) {
+    let cover = "No image available"; 
     let title = "No title available";
     let authors = "No author available";
     let publisher = "No publisher available"; 
     let publishedDate = "No data available";
     let synopsis = "No synopsis available"; 
-    let subject = "No subject available"; 
+    let subjects = "No subject available"; 
     let pageCount = "No page count available"; 
+    let isbn10 = "No ISBN_10 available"; 
+    let isbn13 = "No ISBN_13 available";
     
     console.log("fine"); 
     let book = {
+        cover: cover, 
         title: title, 
         authors: authors, 
         publisher: publisher, 
         publishedDate: publishedDate, 
-        subject: subject, 
+        subjects: subjects, 
         pageCount: pageCount, 
+        isbn10: isbn10, 
+        isbn13: isbn13,
         synopsis: synopsis
     }; 
     
+    console.log("BOOK BOOK BOOK BOOK BOOK"); 
     console.log(JSON.stringify(book)); 
     console.log(result);
     console.log(result.volumeInfo.hasOwnProperty("title")); 
+    if (result.volumeInfo.hasOwnProperty("imageLinks") && result.volumeInfo.imageLinks.hasOwnProperty("thumbnail")) {
+        book.cover = result.volumeInfo.imageLinks.thumbnail;    
+    }
     if (result.volumeInfo.hasOwnProperty("title")) {
         book.title = result.volumeInfo.title; 
     }
@@ -94,14 +105,27 @@ function getBookInfo(result) {
         book.publishedDate = result.volumeInfo.publishedDate;
     }
     if (result.volumeInfo.hasOwnProperty("categories")) {
-        book.subject = result.volumeInfo.categories.join(", ");
+        book.subjects = result.volumeInfo.categories.join(", ");
     }
     if (result.volumeInfo.hasOwnProperty("pageCount")) {
         book.pageCount = result.volumeInfo.pageCount;
     }
     if (result.volumeInfo.hasOwnProperty("description")) {
-        book.synopsis = result.volumeInfo.synopsis;
+        book.synopsis = result.volumeInfo.description;
     }
+    
+    let isbns = result.volumeInfo.industryIdentifiers; 
+    if (isbns[0].type == "ISBN_10") {
+        book.isbn10 = isbns[0].identifier; 
+    } else if (isbns[0].type == "ISBN_13") {
+        book.isbn13 = isbns[0].identifier; 
+    }    
+    if (isbns[1].type == "ISBN_10") {
+        book.isbn10 = isbns[1].identifier; 
+    } else if (isbns[1].type == "ISBN_13") {
+        book.isbn13 = isbns[1].identifier; 
+    }
+    
     console.log(JSON.stringify(book));
     return new Promise(function(resolve, reject) {
         if (true) {

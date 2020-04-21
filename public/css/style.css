@@ -29,9 +29,13 @@ body {
 }
 
 
-.bookPic {
-  text-align: center;
+.cover {
+    /*border: 5px;*/
+    /*border-radius: 10px;*/
+    border-style: dashed;
 }
+
+
 /*body {*/
 /*    background-color: #FFFFFF;*/
 /*}*/
