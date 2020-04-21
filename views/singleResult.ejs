@@ -5,7 +5,7 @@
         <h2 class="text-center"><strong><%=book.title%></strong></h2>
         <h3 class="text-center"><%=book.authors%></h3>
     </div>
-    <div class="pb-5 pt-2 row justify-content-center">
+    <div class="pb-4 pt-2 row justify-content-center">
         <div class="col-4 m-3">
             <img class="p-2 cover" src="<%=book.cover%>">
         </div>
@@ -21,5 +21,16 @@
     <div class="d-flex justify-content-center">
         <%=book.synopsis%>
     </div>
-    </div>
+</div>
+<hr>
+<div class="reviews container">
+    <form id="reviewForm" action="/addreview<%=ISBN%>" method="POST" >
+        <input type="hidden" id="isbn" value="<%=ISBN%>">
+        <div class="form-group">
+            <label for="newReview">Write a review!</label>
+            <textarea class="form-control" name="newReview" id="newReview" rows="3"></textarea>
+        </div>
+        <button input type="submit" class="btn btn-light btn-sm">Submit</button>
+    </form>
+</div>
 <%- include('templates/footer') -%>

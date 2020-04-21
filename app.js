@@ -1,9 +1,11 @@
 const express = require("express");
 const request = require('request');
+const bodyParser = require("body-parser");
 const _ = require('lodash');
 const port = 8080;
 const app = express();
 
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 var api_key = process.env.book_key;
@@ -51,8 +53,13 @@ app.get("/results/:ISBN", async function(req, res){
     let book =  await getBookInfo(results.items[0]); 
     // console.log(JSON.stringify(book));
     console.log(book);
-    res.render("singleResult.ejs", {book: book});
+    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN});
 });
+
+app.post("/addreview/:ISBN", function(req, res) {
+    console.log(req.body);
+    
+}); 
 
 app.listen(process.env.PORT || port, function(){
     console.log("server is running...");

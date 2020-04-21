@@ -35,6 +35,9 @@ body {
     border-style: dashed;
 }
 
+.reviews {
+  width:100%;
+}
 
 /*body {*/
 /*    background-color: #FFFFFF;*/
