@@ -7,6 +7,19 @@
 	color: white;
 }
 
+.scroll-button{
+  background-color: transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+}
+
+i::before{
+  background:transparent;
+}
+
 .navbar-inverse .navbar-nav > li > a{
 	color: white;
 }
