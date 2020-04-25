@@ -19,7 +19,6 @@ $("#reviewForm").submit(function(event) {
         }
     
     });//ajax
-
 }); 
 
 let nextBook = $("#nextBook");
@@ -43,3 +42,28 @@ $("button").click(function(){
     )
 });
 
+$("#loginForm").submit(function() {
+    console.log("validating user and pass: ");
+    let login = $("#username");
+    let password = $("#password");
+    console.log(login, password);
+    // $.ajax({
+    //     method: "POST",
+    //     url: "/addreview/" + $("#isbn").val(),
+    //     dataType: "JSON",
+    //     data: { 
+    //         "newReview": $("#newReview").val(), 
+    //         "username": "user123"
+    //     },
+    //     success: function(result,status) {
+          
+    //          alert(result);
+    //     }, 
+        
+    //     error: function(error,status) {
+          
+    //          alert(error);
+    //     }
+    
+    // });//ajax
+}); 
