@@ -1,9 +1,13 @@
 const express = require("express");
 const request = require('request');
+const mysql = require('mysql');
 const _ = require('lodash');
+const bodyParser = require('body-parser');
 const port = 8080;
 const app = express();
 
+let firstBook = 0;
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 const api_key = process.env.book_key;
@@ -14,7 +18,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: databaseUsername,
     password: databasePassword,
-    database: 'featured_books'
+    database: 'bookrec_db'
 });
 connection.connect();
 
@@ -40,8 +44,26 @@ app.get("/results/:ISBN", function(req, res){
 });
 
 app.get("/populateCards", function(req, res) {
-    let 
-})
+    let statement =  'select * from featured_books';
+    let body = req.body.card1;
+    console.log(body);
+    connection.query(statement, function(error, found){
+	    if(error) throw error;
+	    if(found.length){
+	        let cards = [];
+	        let card1 = "The Hobbit";
+	        found.forEach(function(item, index){
+	           if(item.title == card1){
+    	           cards[0] = found[(index+1)%found.length];
+    	           cards[1] = found[(index+2)%found.length];
+    	           cards[2] = found[(index+3)%found.length];
+	           }
+	        });
+	        console.log(cards);
+            res.send(cards);
+	    }//found.length
+    });//connection
+});//route
 
 app.listen(process.env.PORT || port, function(){
     console.log("server is running...");
