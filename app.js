@@ -3,11 +3,10 @@ const request = require('request');
 const bodyParser = require("body-parser");
 const _ = require('lodash');
 const mysql = require('mysql');
+const session = require('express-session');
+
 const port = 8080;
 const app = express();
-
-const LocalStorage = require('node-localstorage').LocalStorage;
-const localStorage = new LocalStorage('./scratch');
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -16,8 +15,7 @@ app.use(express.static("public"));
 const api_key = process.env.book_key;
 const databaseUsername = process.env.user;
 const databasePassword = process.env.pass;
-localStorage.setItem("username", "");
-localStorage.setItem("password", "");
+
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -27,8 +25,22 @@ const connection = mysql.createConnection({
 });
 connection.connect();
 
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+}));
+
+app.use(function (req, res, next) {
+  res.locals.user = "false";
+  req.session.username = "false";
+  next();
+});
+
+
 //routes
 app.get("/", function(req, res){
+    console.log(res.locals.user);   
     res.render("home.ejs");
 });
 
@@ -38,6 +50,7 @@ app.get("/", function(req, res){
 // https://www.googleapis.com/books/v1/volumes?q=intitle:Harry%20Potter+inauthor:JK%20Rowling+subject:  -> books found
 
 app.get("/results", async function(req, res){
+    res.locals.user = req.session.username;
     let params = getParameters(req); 
     let books = await getResults(params);
     // console.log('in results');
@@ -54,17 +67,20 @@ app.get("/results", async function(req, res){
 });
 
 app.get("/signup", function(req, res){
+    res.locals.user = req.session.username;
     res.render("signup.ejs");
 });
 
 app.get("/login", function(req, res){
-    res.render("login.ejs");
+    res.locals.user = req.session.username;
+    res.render("login.ejs", {"invalid": false});
 });
 
 
 // https://www.googleapis.com/books/v1/volumes?q=subject:student -> [1] has no ISBN
 // https://www.googleapis.com/books/v1/volumes?q=intitle:The%20Distribution%20of%20Mexico%27s%20Public%20Spending%20on%20Education+inauthor:Gladys%20Lopez%20Acevedo+Angel%20Salinas
 app.get("/results/:ISBN", async function(req, res){
+    res.locals.user = req.session.username;
     let results = await getResults('q=isbn:'+req.params.ISBN);
     console.log(results);
     let book =  await getBookInfo(results.items[0]); 
@@ -80,15 +96,14 @@ app.post("/addreview/:ISBN", function(req, res) {
 }); 
 
 
-app.get("/populateCards", function(req, res) {
+app.post("/populateCards", function(req, res) {
     let statement =  'select * from featured_books';
-    let body = req.body.card1;
-    console.log(body);
+    console.log(req.body.card1);
     connection.query(statement, function(error, found){
 	    if(error) throw error;
 	    if(found.length){
 	        let cards = [];
-	        let card1 = "The Hobbit";
+	        let card1 = req.body.card1;
 	        found.forEach(function(item, index){
 	           if(item.title == card1){
     	           cards[0] = found[(index+1)%found.length];
@@ -101,6 +116,25 @@ app.get("/populateCards", function(req, res) {
 	    }//found.length
     });//connection
 });//route
+
+
+app.post('/loginSession', function(req, res){
+    let statement = 'select * from users where username=\'' 
+                    + req.body.username + '\' and password=\''
+                    + req.body.password + '\';';
+    connection.query(statement, function(error, found){
+	    if(error) throw error;
+	    if(found.length){
+            req.session.username = req.body.username;
+            res.locals.user = req.session.username;
+            console.log(res.locals.user);
+            res.render("home.ejs");
+	    } else {
+            res.render("login.ejs", {"invalid": true});
+        }//found.length
+    });//connection
+});//route
+
 
 app.listen(process.env.PORT || port, function(){
     console.log("server is running...");
@@ -240,21 +274,3 @@ function getResults(params) {
     }); //Promise
 } //getResults
 
-app.post('/', function(req, res){
-    let statement = 'select * from users where username=\'' + req.body.username + '\';';
-    connection.query(statement, function(error, found){
-	    if(error) throw error;
-	    if(found.length){
-	        console.log(found);
-	        if(found[0].password == req.body.password){
-	            localStorage.setItem("username", "test "+req.body.username);
-                localStorage.setItem("password", "test "+req.body.password);
-                res.render("home.ejs");
-	        } else {
-	            res.render("login.ejs");
-	        }
-	    }else {
-            res.render("login.ejs");
-        }//found.length
-    });//connection
-});//route
