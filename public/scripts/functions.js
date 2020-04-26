@@ -19,20 +19,24 @@ $("#reviewForm").submit(function(event) {
         }
     
     });//ajax
-
 }); 
 
 let nextBook = $("#nextBook");
 let prevBook = $("#prevBook");
 
-$("button").click(function(){
+$(".forwardCard").click(function(){
+    console.log($("#card1").text());
     $.ajax({
         url: "/populateCards",
-        type: "GET",
-        dataType: "json",
+        type: "POST",
+        dataType: "JSON",
+        data: {
+            "card1":$("#card1").text()
+        },
         success: function(data){
-            $.each(data, function(key, value) {
-                
+            let res = data[0];
+            $.each(res, function(key, value) {
+                console.log(key, value);
             });
         },
         error: function(e) {
@@ -43,3 +47,9 @@ $("button").click(function(){
     )
 });
 
+// $("#loginForm").submit(function() {
+//     console.log("validating user and pass: ");
+//     let login = $("#username");
+//     let password = $("#password");
+//     console.log(login, password);
+// }); 

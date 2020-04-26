@@ -21,9 +21,12 @@
     "body-parser": "^1.19.0",
     "ejs": "^3.0.2",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "jquery": "^3.5.0",
     "jsdom": "^16.2.2",
     "lodash": "^4.17.15",
+    "mysql": "^2.18.1",
+    "node-localstorage": "^2.1.6",
     "request": "^2.88.2"
   }
 }
