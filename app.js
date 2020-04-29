@@ -122,12 +122,14 @@ function getReviews(ISBN) {
 app.post("/addreview/:ISBN", function(req, res) {
     console.log(req.body.newReview);
     let datetime = moment().format(); 
+    console.log(req.body);
     addReview(req, datetime);
-    res.json({
-        newReview: req.body.newReview, 
-        username: req.body.username, 
-        datetime: moment(datetime).fromNow()
-    }); 
+    res.redirect("/results/" + req.params.ISBN); 
+    // res.json({
+    //     newReview: req.body.newReview, 
+    //     username: req.body.username, 
+    //     datetime: moment(datetime).fromNow()
+    // }); 
 }); 
 
 

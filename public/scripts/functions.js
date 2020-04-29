@@ -4,7 +4,7 @@ $("#editBtn").on("click", function(){
     let originalReview = $("#" + user + "> #review").text().trim();
     console.log("original Review = " + originalReview);
     $("#" + user + ' > #review').html(`
-        <textarea class="form-control" name="review" id="review" rows="5">`+ originalReview + `</textarea>
+        <textarea class="form-control" name="review" id="review" rows="5" required>`+ originalReview + `</textarea>
     `);
     $("#deleteBtn").hide();
     $("#editBtn").hide();
@@ -30,42 +30,42 @@ $("#editBtn").on("click", function(){
 }); 
 
 
-$("#reviewForm").submit(function(event) {
-    event.preventDefault(); 
-    console.log($("#datetime").val()); 
-    $.ajax({
-        method: "POST",
-        url: "/addreview/" + $("#isbn").val(),
-        dataType: "JSON",
-        data: { 
-            "newReview": $("#newReview").val(), 
-            "username": $("#user").val(), 
-            "datetime": $("#datetime").val()
-        },
-        success: function(result,status) {
-            console.log(result);
-            console.log(result.username);
-             $("#reviews").append(`
-                <div id="` + result.username + `" class="heading row">    
-                    <div class="col">` + 
-                        result.username + `
-                    </div>
-                    <div class="align col">` + 
-                        result.datetime + `
-                    </div>
-                </div>
-                <div>` + result.newReview + `</div>
-                <hr>
-             `)
-        }, 
+// $("#reviewForm").submit(function(event) {
+//     event.preventDefault(); 
+//     console.log($("#datetime").val()); 
+//     $.ajax({
+//         method: "POST",
+//         url: "/addreview/" + $("#isbn").val(),
+//         dataType: "JSON",
+//         data: { 
+//             "newReview": $("#newReview").val(), 
+//             "username": $("#user").val(), 
+//             "datetime": $("#datetime").val()
+//         },
+//         success: function(result,status) {
+//             console.log(result);
+//             console.log(result.username);
+//              $("#reviews").append(`
+//                 <div id="` + result.username + `" class="heading row">    
+//                     <div class="col">` + 
+//                         result.username + `
+//                     </div>
+//                     <div class="align col">` + 
+//                         result.datetime + `
+//                     </div>
+//                 </div>
+//                 <div>` + result.newReview + `</div>
+//                 <hr>
+//              `)
+//         }, 
         
-        error: function(error,status) {
+//         error: function(error,status) {
           
-             alert(error);
-        }
+//              alert(error);
+//         }
     
-    });//ajax
-}); 
+//     });//ajax
+// }); 
 
 let nextBook = $("#nextBook");
 let prevBook = $("#prevBook");

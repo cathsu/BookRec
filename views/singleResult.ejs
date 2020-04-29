@@ -52,12 +52,12 @@
 
     <!--only show textbox if user has logged in AND has not left a review-->
     <%if (user && !hasUserLeftReview) {%>
-        <form id="reviewForm" action="/addreview<%=ISBN%>" method="POST" >
-            <input type="hidden" id="isbn" value="<%=ISBN%>">
-            <input type="hidden" id="user" value="<%=user%>">
+        <form id="reviewForm" action="/addreview/<%=ISBN%>" method="POST" >
+            <!--<input type="hidden" id="isbn" value="<%=ISBN%>">-->
+            <input type="hidden" name="username" value="<%=user%>">
             <div class="form-group">
                 <label for="newReview">Write a review!</label>
-                <textarea class="form-control" name="newReview" id="newReview" rows="5"></textarea>
+                <textarea class="form-control" name="newReview" id="newReview" rows="5" required></textarea>
             </div>
             <button input type="submit" class="btn btn-success btn-sm">Submit</button>
         </form>
