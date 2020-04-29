@@ -28,16 +28,19 @@ CREATE TABLE `reviews` (
   `ISBN` bigint(13) NOT NULL,
   `username` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `review` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
-  `date` date NOT NULL,
+  `date` datetime NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 INSERT INTO `reviews` (`ISBN`, `username`, `review`, `date`) VALUES
-(9780544115552, 'Connor', "Temporary Hobbit review for testing.", '20-04-14'),
-(9781781100486, 'Connor', "Temporary Harry Potter review for testing.", '20-04-14'),
-(9780441013593, 'Connor', "Temporary Dune review for testing.", '20-04-14'),
-(9780375760303, 'Connor', "Temporary CoMC review for testing.", '20-04-14');
+(9780544115552, 'connor', "Temporary Hobbit review for testing.", '2020-04-10 12:45:54'),
+(9781781100486, 'connor', "Temporary Harry Potter review for testing.", '2020-04-10 12:45:54'),
+(9780441013593, 'connor', "Temporary Dune review for testing.", '2020-04-10 12:45:54'),
+(9780375760303, 'connor', "Temporary CoMC review for testing.", '2020-04-10 12:45:54'),
+(9781593278519, 'cathy', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-10 10:05:54'),
+(9781593278519, 'connor', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-28 09:45:09'),
+(9781593278519, 'admin', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-16 07:25:54');
 
 
 DROP TABLE IF EXISTS `users`;

@@ -23,14 +23,37 @@
     </div>
 </div>
 <hr>
-<div class="reviews container">
+<div class="container">
+    <h2 class="text-center"><strong>Reviews</strong></h2>
+    <div id="reviews" class="pb-4 pt-2 reviews">
+        <%reviews.forEach(function(review) {%>
+            <div id=<%=review.username%>>
+                <div class="heading row">    
+                    <div class="col">
+                        <%=review.username%>
+                    </div>
+                    <div class="align col">
+                        <%=moment(review.date).fromNow();%>
+                    </div>
+                </div>
+                <div id="review"><%=review.review%></div>
+                <div class="align">
+                    <button id="editBtn" input type="submit" class="btn btn-primary btn-sm">Edit</button>
+                    <button id="deleteBtn" input type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </div>
+            </div>
+            <hr>
+        <%});%>
+    </div>
+
     <form id="reviewForm" action="/addreview<%=ISBN%>" method="POST" >
         <input type="hidden" id="isbn" value="<%=ISBN%>">
         <div class="form-group">
             <label for="newReview">Write a review!</label>
-            <textarea class="form-control" name="newReview" id="newReview" rows="3"></textarea>
+            <textarea class="form-control" name="newReview" id="newReview" rows="5"></textarea>
         </div>
-        <button input type="submit" class="btn btn-light btn-sm">Submit</button>
+        <hidden id="datetime" value=<%=moment().format()%>>
+        <button input type="submit" class="btn btn-success btn-sm">Submit</button>
     </form>
 </div>
 <%- include('templates/footer') -%>

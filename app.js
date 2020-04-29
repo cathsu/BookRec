@@ -3,6 +3,8 @@ const request = require('request');
 const bodyParser = require("body-parser");
 const _ = require('lodash');
 const mysql = require('mysql');
+const moment = require('moment-timezone');
+// const moment = require('moment');
 const session = require('express-session');
 
 const port = 8080;
@@ -27,7 +29,7 @@ connection.connect();
 
 app.use(session({
     secret: 'keyboard cat',
-    resave: false,
+    resave: true,
     saveUninitialized: true,
 }));
 
@@ -86,14 +88,60 @@ app.get("/results/:ISBN", async function(req, res){
     let book =  await getBookInfo(results.items[0]); 
     // console.log(JSON.stringify(book));
     console.log(book);
-    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN});
+    let reviews = await getReviews(req.params.ISBN); 
+    console.log(reviews);
+    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, user: "cathy"});
 });
+
+function checkUserReviews(ISBN) {
+    let stmt = 'SELECT user FROM reviews WHERE ISBN=?';
+    return new Promise(function(resolve, reject){
+       connection.query(stmt, [ISBN], function(error, results){
+           if(error) throw error;
+           resolve(results);
+       }); 
+    });
+}
+function getReviews(ISBN) {
+    let stmt = 'SELECT * FROM reviews WHERE ISBN=? ORDER by date';
+    return new Promise(function(resolve, reject){
+       connection.query(stmt, [ISBN], function(error, results){
+           if(error) throw error;
+           resolve(results);
+       }); 
+    });
+    
+}
 
 
 app.post("/addreview/:ISBN", function(req, res) {
-    console.log(req.body);
-    
+    console.log(req.body.newReview);
+    let datetime = moment().format(); 
+    addReview(req, datetime);
+    res.json({
+        newReview: req.body.newReview, 
+        username: req.body.username, 
+        datetime: moment(datetime).fromNow()
+    }); 
 }); 
+
+
+function addReview(req, datetime) {
+    let stmt = 'INSERT INTO reviews (ISBN, username, review, date) VALUES (?, ?, ?, ?)'; 
+    let data = [req.params.ISBN, req.body.username, req.body.newReview, datetime]; 
+    console.log(data);
+    connection.query(stmt, data, function(error, result){
+           if(error) throw error;
+           else {
+               connection.query('SELECT * from reviews', function(error, result) {
+                   if (error) throw error; 
+                   else {
+                       console.log(result);
+                   }
+               })
+           }
+    });
+}
 
 
 app.post("/populateCards", function(req, res) {
