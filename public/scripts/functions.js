@@ -1,15 +1,35 @@
 $("#editBtn").on("click", function(){
     console.log("Editing!");
     let user = $(this).parent().parent().attr("id"); 
-    let originalReview = $("#" + user + "> #review").text();
-    console.log(originalReview);
+    let originalReview = $("#" + user + "> #review").text().trim();
+    console.log("original Review = " + originalReview);
     $("#" + user + ' > #review').html(`
-        <textarea class="form-control" name="editedReview" id="editedReview" rows="5"> `+ originalReview + `</textarea>
+        <textarea class="form-control" name="review" id="review" rows="5">`+ originalReview + `</textarea>
     `);
-    $("#" + user).find("#deleteBtn").hide();
+    $("#deleteBtn").hide();
+    $("#editBtn").hide();
+    $("#submitEditBtn").attr("hidden", false); 
+    $("#cancelEditBtn").attr("hidden", false);
+    console.log( $("#buttons > #cancelEditBtn").attr("id"));
     
+    $("#cancelEditBtn").on("click", function() {
+        let user = $(this).parent().parent().attr("id");
+        $("#" + user + ' > #review').html(`
+            <div id="review"> ` + originalReview + `</div>
+        `);
+        $("#deleteBtn").show();
+        $("#editBtn").show();
+        $("#submitEditBtn").attr("hidden", true);  
+        $("#cancelEditBtn").attr("hidden", true); 
+    }); 
+    
+    $("#submitEditBtn").on("click", function() {
+        //AJAX CALL
+    })
     
 }); 
+
+
 $("#reviewForm").submit(function(event) {
     event.preventDefault(); 
     console.log($("#datetime").val()); 

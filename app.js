@@ -90,14 +90,19 @@ app.get("/results/:ISBN", async function(req, res){
     console.log(book);
     let reviews = await getReviews(req.params.ISBN); 
     console.log(reviews);
-    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, user: "cathy"});
+    // console.log("username = " + req.session.username);
+    let usersWhoLeftReviews = await checkUserReviews(req.params.ISBN, "cathy"); 
+    let hasUserLeftReview = usersWhoLeftReviews.length > 0 ? true: false; 
+    console.log("userLeftReview = " + hasUserLeftReview);
+    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, username: "cathy", hasUserLeftReview: hasUserLeftReview});
 });
 
-function checkUserReviews(ISBN) {
-    let stmt = 'SELECT user FROM reviews WHERE ISBN=?';
+function checkUserReviews(ISBN, user) {
+    let stmt = 'SELECT username FROM reviews WHERE ISBN=? AND username=?';
     return new Promise(function(resolve, reject){
-       connection.query(stmt, [ISBN], function(error, results){
+       connection.query(stmt, [ISBN, user], function(error, results){
            if(error) throw error;
+           console.log(results);
            resolve(results);
        }); 
     });
@@ -173,9 +178,10 @@ app.post('/loginSession', function(req, res){
     connection.query(statement, function(error, found){
 	    if(error) throw error;
 	    if(found.length){
+	        req.session.authenticated = true;
+	       // req.session.user = req.body.username;
             req.session.username = req.body.username;
             res.locals.user = req.session.username;
-            console.log(res.locals.user);
             res.render("home.ejs");
 	    } else {
             res.render("login.ejs", {"invalid": true});

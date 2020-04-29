@@ -37,23 +37,30 @@
                     </div>
                 </div>
                 <div id="review"><%=review.review%></div>
-                <div class="align">
-                    <button id="editBtn" input type="submit" class="btn btn-primary btn-sm">Edit</button>
-                    <button id="deleteBtn" input type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </div>
+                <%if (review.username == user) {%>
+                    <div id="buttons" class="align">
+                        <button id="editBtn" input type="submit" class="btn btn-primary btn-sm">Edit</button>
+                        <button id="deleteBtn" input type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        <button id="submitEditBtn" input type="submit" class="btn btn-success btn-sm" hidden>Submit</button>
+                        <button id="cancelEditBtn" input type="submit" class="btn btn-danger btn-sm" hidden>Cancel</button>
+                    </div>
+                <%}%>
             </div>
             <hr>
         <%});%>
     </div>
 
-    <form id="reviewForm" action="/addreview<%=ISBN%>" method="POST" >
-        <input type="hidden" id="isbn" value="<%=ISBN%>">
-        <div class="form-group">
-            <label for="newReview">Write a review!</label>
-            <textarea class="form-control" name="newReview" id="newReview" rows="5"></textarea>
-        </div>
-        <hidden id="datetime" value=<%=moment().format()%>>
-        <button input type="submit" class="btn btn-success btn-sm">Submit</button>
-    </form>
+    <!--only show textbox if user has logged in AND has not left a review-->
+    <%if (user && !hasUserLeftReview) {%>
+        <form id="reviewForm" action="/addreview<%=ISBN%>" method="POST" >
+            <input type="hidden" id="isbn" value="<%=ISBN%>">
+            <div class="form-group">
+                <label for="newReview">Write a review!</label>
+                <textarea class="form-control" name="newReview" id="newReview" rows="5"></textarea>
+            </div>
+            <hidden id="datetime" value=<%=moment().format()%>>
+            <button input type="submit" class="btn btn-success btn-sm">Submit</button>
+        </form>
+    <%}%>
 </div>
 <%- include('templates/footer') -%>
