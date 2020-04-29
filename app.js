@@ -94,7 +94,7 @@ app.get("/results/:ISBN", async function(req, res){
     let usersWhoLeftReviews = await checkUserReviews(req.params.ISBN, "cathy"); 
     let hasUserLeftReview = usersWhoLeftReviews.length > 0 ? true: false; 
     console.log("userLeftReview = " + hasUserLeftReview);
-    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, username: "cathy", hasUserLeftReview: hasUserLeftReview});
+    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, user: "cathy", hasUserLeftReview: hasUserLeftReview});
 });
 
 function checkUserReviews(ISBN, user) {

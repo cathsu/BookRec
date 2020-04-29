@@ -39,7 +39,7 @@ $("#reviewForm").submit(function(event) {
         dataType: "JSON",
         data: { 
             "newReview": $("#newReview").val(), 
-            "username": "user123", 
+            "username": $("#user").val(), 
             "datetime": $("#datetime").val()
         },
         success: function(result,status) {
