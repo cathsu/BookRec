@@ -49,13 +49,9 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `username` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `admin` BOOLEAN, 
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
-INSERT INTO `users` (`username`, `password`) VALUES
-('connor', 'connor'),
-('cathy', 'cathy'),
-('admin', 'admin');
 
 COMMIT;

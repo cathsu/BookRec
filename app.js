@@ -57,46 +57,6 @@ function checkPassword(password, hash){
     });
 }
 
-app.post('/loginSession', async function(req, res){
-    let userExists = await checkUsername(req.body.username);
-    console.log("Credentials user tried to sign in with: ", req.body.username, req.body.password);
-    console.log("User data from database: ", userExists);
-    let hashedPassword = userExists.length > 0 ? userExists[0].password : '';
-    let passwordMatch = await checkPassword(req.body.password, hashedPassword);
-    console.log("Passowrds match results: ", passwordMatch);
-	if(passwordMatch){
-	    req.session.authenticated = true;
-	    req.session.user = userExists[0].username;
-	    res.redirect('/');
-	} else {
-	    res.render('login.ejs', {error: true, user: req.session.user});
-	}
-});
-
-app.post('/register', function(req, res){
-    let salt = 10;
-    if (req.body.password == req.body.confirmPassword){
-        console.log("Registered with:", req.body.username, req.body.password);
-        bcrypt.hash(req.body.password, salt, function(error, hash){
-            if(error) throw error;
-            let stmt = 'INSERT INTO users (username, password) VALUES (?, ?)';
-            let data = [req.body.username, hash];
-            connection.query(stmt, data, function(error, result){
-                if(error && error.errno == 1062){
-                    //catch duplicate username error
-                    console.log(error.errno);
-                    res.render('signup.ejs', {error: true, user: req.session.user});
-                } else {
-                   res.render('login.ejs', {error: false, user: req.session.user});
-                }
-            });
-        });
-    } 
-    //catch failed to type the same password error
-    else {
-        res.render('signup.ejs', {error: false, user: req.session.user});
-    }
-});
 
 ///////////////////////////// HOME //////////////////////////////////
 app.get("/", function(req, res){
@@ -104,13 +64,6 @@ app.get("/", function(req, res){
     res.render("home.ejs", {user: req.session.user});
 });
 
-app.get("/signup", function(req, res){
-    res.render("signup.ejs", {user: req.session.user});
-});
-
-app.get("/login", function(req, res){
-    res.render("login.ejs", {error: false, user: req.session.user});
-});
 
 app.post("/populateCards", function(req, res) {
     let statement =  'select * from featured_books';
@@ -136,15 +89,65 @@ app.post("/populateCards", function(req, res) {
 
 ///////////////////////////// SIGN UP/LOGIN //////////////////////////////////
 
-/* WHERE SIGNUP/LOGIN SHOULD GO */
 
+app.get("/signup", function(req, res){
+    res.render("signup.ejs", {user: req.session.user});
+});
+
+app.get("/login", function(req, res){
+    res.render("login.ejs", {error: false, user: req.session.user});
+});
+
+app.post('/loginSession', async function(req, res){
+    let userExists = await checkUsername(req.body.username);
+    let hashedPassword = userExists.length > 0 ? userExists[0].password : '';
+    let passwordMatch = await checkPassword(req.body.password, hashedPassword);
+    console.log("Passowrds match results: ", passwordMatch);
+	if(passwordMatch){
+	    req.session.authenticated = true;
+	    req.session.user = userExists[0].username;
+	    res.redirect('/');
+	} else {
+	    res.render('login.ejs', {error: true, user: req.session.user});
+	}
+});
+
+app.post('/register', function(req, res){
+    let salt = 10;
+    if (req.body.password == req.body.confirmPassword){
+        console.log("Registered with:", req.body.username, req.body.password);
+        bcrypt.hash(req.body.password, salt, function(error, hash){
+            if(error) throw error;
+            let stmt = 'INSERT INTO users (username, password, admin) VALUES (?, ?, ?)';
+            let data = [req.body.username, hash, 0];
+            connection.query(stmt, data, function(error, result){
+                if(error && error.errno == 1062){
+                    //catch duplicate username error
+                    console.log(error.errno);
+                    res.render('signup.ejs', {error: true, user: req.session.user});
+                } else {
+                   res.render('login.ejs', {error: false, user: req.session.user});
+                }
+            });
+        });
+    } 
+    //catch failed to type the same password error
+    else {
+        res.render('signup.ejs', {error: false, user: req.session.user});
+    }
+});
+
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/');
+});
 
 ///////////////////////////// RESULTS //////////////////////////////////
 app.get("/results", async function(req, res){
     res.locals.user = req.session.username;
     let params = getParameters(req); 
     let books = await getResults(params);
-    res.render("results.ejs", {books: books});
+    res.render("results.ejs", {books: books, user:req.session.user});
 });
 
 
