@@ -58,6 +58,7 @@
     <%if (user && !hasUserLeftReview) {%>
         <form id="reviewForm" action="/review/<%=ISBN%>" method="POST" >
             <!--<input type="hidden" id="isbn" value="<%=ISBN%>">-->
+            <%console.log(user);%>
             <input type="hidden" name="username" value="<%=user%>">
             <div class="form-group">
                 <label for="newReview">Write a review (less than 500 characters long)!</label>

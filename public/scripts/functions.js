@@ -54,6 +54,25 @@ $("#editBtn").on("click", function(){
     
 }); 
 
+$("#deleteBtn").on("click", function(){
+    console.log("Deleting!");
+    let user = $(this).parent().parent().attr("id"); 
+    let isbn = $("#" + user + " > #isbn").val();
+    $.ajax({
+            method: "DELETE",
+            url: "/review/delete", 
+            dataType: "JSON",
+            data: {"username": user, "isbn": isbn},
+            success: function(result,status) {
+                location.reload(true);
+            }, 
+            error: function(error,status) {
+                 alert(error);
+            }
+            
+        });//ajax
+}); 
+
 function toggleButtons(bool) {
     if (bool) {
         $("#deleteBtn").show();
@@ -137,3 +156,5 @@ $(".forwardCard").click(function(){
 //     let password = $("#password");
 //     console.log(login, password);
 // }); 
+
+

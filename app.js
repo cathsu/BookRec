@@ -153,7 +153,6 @@ app.get("/results", async function(req, res){
 
 // 
 app.get("/results/:ISBN", async function(req, res){
-    res.locals.user = req.session.username;
     let results = await getResults('q=isbn:'+req.params.ISBN);
     console.log(results);
     let book =  await getBookInfo(results.items[0]); 
@@ -161,17 +160,24 @@ app.get("/results/:ISBN", async function(req, res){
     console.log(book);
     let reviews = await getReviews(req.params.ISBN); 
     console.log(reviews);
-    // console.log("username = " + req.session.username);
-    let usersWhoLeftReviews = await checkUserReviews(req.params.ISBN, "cathy"); 
+    let usersWhoLeftReviews = await checkUserReviews(req.params.ISBN, req.session.user); 
     let hasUserLeftReview = usersWhoLeftReviews.length > 0 ? true: false; 
-    console.log("userLeftReview = " + hasUserLeftReview);
-    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, user: "cathy", hasUserLeftReview: hasUserLeftReview});
+    console.log("Who left a review? = " + usersWhoLeftReviews);
+    res.render("singleResult.ejs", {
+                    book: book, 
+                    ISBN: req.params.ISBN, 
+                    moment:moment, 
+                    reviews: reviews, 
+                    user: req.session.user, 
+                    hasUserLeftReview: hasUserLeftReview
+                });
 });
 
 app.post("/review/:ISBN", async function(req, res) {
     console.log(req.body.newReview);
     let datetime = moment().format(); 
     console.log(req.body);
+    console.log("Calling add review, req has user: ", req.session.user);
     await addReview(req, datetime);
     res.redirect("/results/" + req.params.ISBN); 
 }); 
@@ -185,6 +191,10 @@ app.put("/review/:ISBN", async function(req, res) {
     
 });
 
+/* Delete a review record */
+app.delete('/review/delete', async function(req, res) {
+    res.send(await deleteReview(req));
+});
 
 app.listen(process.env.PORT || port, function(){
     console.log("server is running...");
@@ -315,7 +325,6 @@ function getResults(params) {
                 console.log(response.statusCode); 
                 console.log(response.error);
             }
-            
         }); //request
     }); //Promise
 } //getResults
@@ -325,7 +334,6 @@ function checkUserReviews(ISBN, user) {
     return new Promise(function(resolve, reject){
        connection.query(stmt, [ISBN, user], function(error, results){
            if(error) throw error;
-           console.log(results);
            resolve(results);
        }); //connection
     }); //Promise
@@ -343,7 +351,7 @@ function getReviews(ISBN) {
 
 function addReview(req, datetime) {
     let stmt = 'INSERT INTO reviews (ISBN, username, review, date, edit) VALUES (?, ?, ?, ?, ?)'; 
-    let data = [req.params.ISBN, req.body.username, req.body.newReview, datetime, 0]; 
+    let data = [req.params.ISBN, req.session.user, req.body.newReview, datetime, 0]; 
     console.log(data);
     return new Promise(function(resolve, reject){
        connection.query(stmt, data, function(error, result){
@@ -357,7 +365,7 @@ function editReview(req) {
     let stmt = 'UPDATE reviews ' + 
                 'SET review = ?, edit = ? ' + 
                 'WHERE ISBN = ? and username = ?'; 
-    let data = [req.body.editedReview, 1, req.params.ISBN, req.body.username];
+    let data = [req.body.editedReview, 1, req.params.ISBN, req.session.user];
     return new Promise(function(resolve, reject){
        connection.query(stmt, data, function(error, results){
            if(error) throw error;
@@ -367,4 +375,14 @@ function editReview(req) {
 } //editReviews
 
 
-
+function deleteReview(req) {
+    let stmt = 'DELETE from reviews ' +
+                'WHERE ISBN = ? and username = ?'; 
+    let data = [req.body.isbn, req.session.user];
+    return new Promise((resolve, reject) => {
+        connection.query(stmt, data, (error, results) =>{
+            if(error) throw error;
+            resolve(results);
+        });
+    });
+}
