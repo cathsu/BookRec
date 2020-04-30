@@ -6,6 +6,7 @@ const mysql = require('mysql');
 const moment = require('moment-timezone');
 // const moment = require('moment');
 const session = require('express-session');
+const bcrypt = require('bcrypt');
 
 const port = 8080;
 const app = express();
@@ -14,7 +15,6 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-const api_key = process.env.book_key;
 const databaseUsername = process.env.user;
 const databasePassword = process.env.pass;
 
@@ -33,17 +33,78 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-app.use(function (req, res, next) {
-  res.locals.user = "false";
-  req.session.username = "false";
-  next();
+
+/* MIDDLEWARE */
+function isAuthenticated(req, res){
+    if(!req.session.authenticated) return false;
+    else return true;
+}
+
+function checkUsername(username){
+    let stmt = 'SELECT * FROM users WHERE username=?';
+    return new Promise(function(resolve, reject){
+       connection.query(stmt, [username], function(error, results){
+           if(error) throw error;
+           resolve(results);
+       }); 
+    });
+}
+
+function checkPassword(password, hash){
+    return new Promise(function(resolve, reject){
+       bcrypt.compare(password, hash, function(error, result){
+          if(error) throw error;
+          console.log("Result in checkPassword function: ", result);
+          resolve(result);
+       }); 
+    });
+}
+
+app.post('/loginSession', async function(req, res){
+    let userExists = await checkUsername(req.body.username);
+    console.log("Credentials user tried to sign in with: ", req.body.username, req.body.password);
+    console.log("User data from database: ", userExists);
+    let hashedPassword = userExists.length > 0 ? userExists[0].password : '';
+    let passwordMatch = await checkPassword(req.body.password, hashedPassword);
+    console.log("Passowrds match results: ", passwordMatch);
+	if(passwordMatch){
+	    req.session.authenticated = true;
+	    req.session.user = userExists[0].username;
+	    res.redirect('/');
+	} else {
+	    res.render('login.ejs', {error: true, user: req.session.user});
+	}
 });
 
+app.post('/register', function(req, res){
+    let salt = 10;
+    if (req.body.password == req.body.confirmPassword){
+        console.log("Registered with:", req.body.username, req.body.password);
+        bcrypt.hash(req.body.password, salt, function(error, hash){
+            if(error) throw error;
+            let stmt = 'INSERT INTO users (username, password) VALUES (?, ?)';
+            let data = [req.body.username, hash];
+            connection.query(stmt, data, function(error, result){
+                if(error && error.errno == 1062){
+                    //catch duplicate username error
+                    console.log(error.errno);
+                    res.render('signup.ejs', {error: true, user: req.session.user});
+                } else {
+                   res.render('login.ejs', {error: false, user: req.session.user});
+                }
+            });
+        });
+    } 
+    //catch failed to type the same password error
+    else {
+        res.render('signup.ejs', {error: false, user: req.session.user});
+    }
+});
 
 //routes
 app.get("/", function(req, res){
-    console.log(res.locals.user);   
-    res.render("home.ejs");
+    console.log("Session user: ", req.session.user);   
+    res.render("home.ejs", {user: req.session.user});
 });
 
 // title=A+&author=&subject=Criticism - no image, long title
@@ -65,17 +126,15 @@ app.get("/results", async function(req, res){
         
     //     count ++; 
     // })
-    res.render("results.ejs", {books: books});
+    res.render("results.ejs", {books: books, user: req.session.user});
 });
 
 app.get("/signup", function(req, res){
-    res.locals.user = req.session.username;
-    res.render("signup.ejs");
+    res.render("signup.ejs", {user: req.session.user});
 });
 
 app.get("/login", function(req, res){
-    res.locals.user = req.session.username;
-    res.render("login.ejs", {"invalid": false});
+    res.render("login.ejs", {error: false, user: req.session.user});
 });
 
 
@@ -94,7 +153,7 @@ app.get("/results/:ISBN", async function(req, res){
     let usersWhoLeftReviews = await checkUserReviews(req.params.ISBN, "cathy"); 
     let hasUserLeftReview = usersWhoLeftReviews.length > 0 ? true: false; 
     console.log("userLeftReview = " + hasUserLeftReview);
-    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, user: "cathy", hasUserLeftReview: hasUserLeftReview});
+    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, user: "cathy", hasUserLeftReview: hasUserLeftReview, user: req.session.user});
 });
 
 function checkUserReviews(ISBN, user) {
@@ -173,23 +232,6 @@ app.post("/populateCards", function(req, res) {
 });//route
 
 
-app.post('/loginSession', function(req, res){
-    let statement = 'select * from users where username=\'' 
-                    + req.body.username + '\' and password=\''
-                    + req.body.password + '\';';
-    connection.query(statement, function(error, found){
-	    if(error) throw error;
-	    if(found.length){
-	        req.session.authenticated = true;
-	       // req.session.user = req.body.username;
-            req.session.username = req.body.username;
-            res.locals.user = req.session.username;
-            res.render("home.ejs");
-	    } else {
-            res.render("login.ejs", {"invalid": true});
-        }//found.length
-    });//connection
-});//route
 
 
 app.listen(process.env.PORT || port, function(){
