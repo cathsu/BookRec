@@ -9,7 +9,7 @@
             <input type="password" id="password" name="password" placeholder="password">
             <input type="submit" class="btn btn-primary btn-block'" value="Log In">
         </form>
-        <%if(invalid == true){ %>
+        <%if(typeof error != 'undefined' && error){%>
         <div class="error">
             Invalid username or password, please try again.<br>
         </div>

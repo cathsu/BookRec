@@ -1,4 +1,21 @@
 <%- include('templates/header') -%>
 
+<div class="wrapper">
+    <div id="formContent">
+        <!-- Login Form -->
+        <h3>Sign Up</h3>
+        <form id="register" action="/register" method="POST">
+            <input type="text" id="username" name="username" placeholder="Username">
+            <input type="password" id="password" name="password" placeholder="Password">
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
+            <input type="submit" class="btn btn-primary btn-block'" value="Register">
+        </form>
+        <%if(typeof error != 'undefined' && error){%>
+        <div class="error">
+            Username taken, please try again.<br>
+        </div>
+        <%}%>
 
+    </div>
+</div>
 <%- include('templates/footer') -%>

@@ -5,6 +5,7 @@ const _ = require('lodash');
 const mysql = require('mysql');
 const moment = require('moment');
 const session = require('express-session');
+const bcrypt = require('bcrypt');
 
 const port = 8080;
 const app = express();
@@ -12,7 +13,6 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-const api_key = process.env.book_key;
 const databaseUsername = process.env.user;
 const databasePassword = process.env.pass;
 
@@ -30,19 +30,186 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-app.use(function (req, res, next) {
-  res.locals.user = "false";
-  req.session.username = "false";
-  next();
+
+/* MIDDLEWARE */
+function isAuthenticated(req, res){
+    if(!req.session.authenticated) return false;
+    else return true;
+}
+
+function checkUsername(username){
+    let stmt = 'SELECT * FROM users WHERE username=?';
+    return new Promise(function(resolve, reject){
+       connection.query(stmt, [username], function(error, results){
+           if(error) throw error;
+           resolve(results);
+       }); 
+    });
+}
+
+function checkPassword(password, hash){
+    return new Promise(function(resolve, reject){
+       bcrypt.compare(password, hash, function(error, result){
+          if(error) throw error;
+          console.log("Result in checkPassword function: ", result);
+          resolve(result);
+       }); 
+    });
+}
+
+app.post('/loginSession', async function(req, res){
+    let userExists = await checkUsername(req.body.username);
+    console.log("Credentials user tried to sign in with: ", req.body.username, req.body.password);
+    console.log("User data from database: ", userExists);
+    let hashedPassword = userExists.length > 0 ? userExists[0].password : '';
+    let passwordMatch = await checkPassword(req.body.password, hashedPassword);
+    console.log("Passowrds match results: ", passwordMatch);
+	if(passwordMatch){
+	    req.session.authenticated = true;
+	    req.session.user = userExists[0].username;
+	    res.redirect('/');
+	} else {
+	    res.render('login.ejs', {error: true, user: req.session.user});
+	}
 });
 
+app.post('/register', function(req, res){
+    let salt = 10;
+    if (req.body.password == req.body.confirmPassword){
+        console.log("Registered with:", req.body.username, req.body.password);
+        bcrypt.hash(req.body.password, salt, function(error, hash){
+            if(error) throw error;
+            let stmt = 'INSERT INTO users (username, password) VALUES (?, ?)';
+            let data = [req.body.username, hash];
+            connection.query(stmt, data, function(error, result){
+                if(error && error.errno == 1062){
+                    //catch duplicate username error
+                    console.log(error.errno);
+                    res.render('signup.ejs', {error: true, user: req.session.user});
+                } else {
+                   res.render('login.ejs', {error: false, user: req.session.user});
+                }
+            });
+        });
+    } 
+    //catch failed to type the same password error
+    else {
+        res.render('signup.ejs', {error: false, user: req.session.user});
+    }
+});
 
 ///////////////////////////// HOME //////////////////////////////////
 app.get("/", function(req, res){
-    console.log(res.locals.user);   
-    res.render("home.ejs");
+    console.log("Session user: ", req.session.user);   
+    res.render("home.ejs", {user: req.session.user});
 });
 
+<<<<<<< HEAD
+=======
+// title=A+&author=&subject=Criticism - no image, long title
+// https://www.googleapis.com/books/v1/volumes?q=intitle:Harry%20Potter+inauthor:JK%20Rowling+subject:'' -> no books found
+// https://www.googleapis.com/books/v1/volumes?q=intitle:Harry%20Potter+inauthor:+subject: -> no books found
+// https://www.googleapis.com/books/v1/volumes?q=intitle:Harry%20Potter+inauthor:JK%20Rowling+subject:  -> books found
+
+app.get("/results", async function(req, res){
+    res.locals.user = req.session.username;
+    let params = getParameters(req); 
+    let books = await getResults(params);
+    // console.log('in results');
+    // console.log(results.hasOwnProperty("imageLinks"));
+    let count = 0; 
+    // results.items.forEach(function(r) {
+    //     console.log(r.volumeInfo.industryIdentifiers[0].hasOwnProperty("identifier")); 
+    //     console.log(count);
+    //     console.log(r.volumeInfo.title);
+        
+    //     count ++; 
+    // })
+    res.render("results.ejs", {books: books, user: req.session.user});
+});
+
+app.get("/signup", function(req, res){
+    res.render("signup.ejs", {user: req.session.user});
+});
+
+app.get("/login", function(req, res){
+    res.render("login.ejs", {error: false, user: req.session.user});
+});
+
+
+// https://www.googleapis.com/books/v1/volumes?q=subject:student -> [1] has no ISBN
+// https://www.googleapis.com/books/v1/volumes?q=intitle:The%20Distribution%20of%20Mexico%27s%20Public%20Spending%20on%20Education+inauthor:Gladys%20Lopez%20Acevedo+Angel%20Salinas
+app.get("/results/:ISBN", async function(req, res){
+    res.locals.user = req.session.username;
+    let results = await getResults('q=isbn:'+req.params.ISBN);
+    console.log(results);
+    let book =  await getBookInfo(results.items[0]); 
+    // console.log(JSON.stringify(book));
+    console.log(book);
+    let reviews = await getReviews(req.params.ISBN); 
+    console.log(reviews);
+    // console.log("username = " + req.session.username);
+    let usersWhoLeftReviews = await checkUserReviews(req.params.ISBN, "cathy"); 
+    let hasUserLeftReview = usersWhoLeftReviews.length > 0 ? true: false; 
+    console.log("userLeftReview = " + hasUserLeftReview);
+    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, user: "cathy", hasUserLeftReview: hasUserLeftReview, user: req.session.user});
+});
+
+function checkUserReviews(ISBN, user) {
+    let stmt = 'SELECT username FROM reviews WHERE ISBN=? AND username=?';
+    return new Promise(function(resolve, reject){
+       connection.query(stmt, [ISBN, user], function(error, results){
+           if(error) throw error;
+           console.log(results);
+           resolve(results);
+       }); 
+    });
+}
+function getReviews(ISBN) {
+    let stmt = 'SELECT * FROM reviews WHERE ISBN=? ORDER by date';
+    return new Promise(function(resolve, reject){
+       connection.query(stmt, [ISBN], function(error, results){
+           if(error) throw error;
+           resolve(results);
+       }); 
+    });
+    
+}
+
+
+app.post("/addreview/:ISBN", function(req, res) {
+    console.log(req.body.newReview);
+    let datetime = moment().format(); 
+    console.log(req.body);
+    addReview(req, datetime);
+    res.redirect("/results/" + req.params.ISBN); 
+    // res.json({
+    //     newReview: req.body.newReview, 
+    //     username: req.body.username, 
+    //     datetime: moment(datetime).fromNow()
+    // }); 
+}); 
+
+
+function addReview(req, datetime) {
+    let stmt = 'INSERT INTO reviews (ISBN, username, review, date) VALUES (?, ?, ?, ?)'; 
+    let data = [req.params.ISBN, req.body.username, req.body.newReview, datetime]; 
+    console.log(data);
+    connection.query(stmt, data, function(error, result){
+           if(error) throw error;
+           else {
+               connection.query('SELECT * from reviews', function(error, result) {
+                   if (error) throw error; 
+                   else {
+                       console.log(result);
+                   }
+               })
+           }
+    });
+}
+
+
+>>>>>>> 2ea9ae86f75dbcf1e27b6129c5ef8ae7d1a145ba
 app.post("/populateCards", function(req, res) {
     let statement =  'select * from featured_books';
     console.log(req.body.card1);
@@ -65,6 +232,7 @@ app.post("/populateCards", function(req, res) {
 });//route
 
 
+<<<<<<< HEAD
 ///////////////////////////// SIGN UP/LOGIN //////////////////////////////////
 app.get("/signup", function(req, res){
     res.locals.user = req.session.username;
@@ -93,6 +261,8 @@ app.post('/loginSession', function(req, res){
         }//found.length
     });//connection
 });//route
+=======
+>>>>>>> 2ea9ae86f75dbcf1e27b6129c5ef8ae7d1a145ba
 
 
 
