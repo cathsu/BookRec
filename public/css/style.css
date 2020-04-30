@@ -57,6 +57,9 @@ body {
   font-weight:bold;
 }
 
+.whitespace {
+  white-space: pre-wrap;
+}
 
 .align {
   text-align: right;

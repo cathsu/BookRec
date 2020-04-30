@@ -37,7 +37,7 @@
                         <%=moment(review.date).fromNow();%>
                     </div>
                 </div>
-                <div id="review"><%=review.review%></div>
+                <div class="whitespace" id="review"><%=review.review%></div>
                 <%if (review.edit == 1) {%>
                     <span id="edit"><i>(Edited)</i></span>
                 <%}%>
@@ -61,7 +61,7 @@
             <input type="hidden" name="username" value="<%=user%>">
             <div class="form-group">
                 <label for="newReview">Write a review (less than 500 characters long)!</label>
-                <textarea class="form-control" name="newReview" id="newReview" rows="5" required></textarea>
+                <textarea class="form-control" class="whitespace" name="newReview" id="newReview" rows="5" required></textarea>
             </div>
             <button input type="submit" class="btn btn-success btn-sm">Submit</button>
         </form>

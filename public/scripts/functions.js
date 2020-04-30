@@ -2,11 +2,9 @@ $("#editBtn").on("click", function(){
     console.log("Editing!");
     let user = $(this).parent().parent().attr("id"); 
     let userReview =  $("#" + user + ' > #review'); 
-    let originalReview = $("#" + user + "> #review").text().trim();
+    let originalReview = $("#" + user + "> #review").text();
     console.log("original Review = " + originalReview);
-    userReview.html(`
-        <textarea class="form-control" name="editedReview" id="editedReview" rows="5" required>`+ originalReview + `</textarea>
-    `);
+    userReview.html('<textarea class="form-control" class="whitespace" name="editedReview" id="editedReview" rows="5" required>'+ originalReview + '</textarea>');
     // $("#deleteBtn").hide();
     // $("#editBtn").hide();
     // $("#submitEditBtn").attr("hidden", false); 
@@ -18,10 +16,9 @@ $("#editBtn").on("click", function(){
     console.log(didEditBefore);
     $("#cancelEditBtn").on("click", function() {
         // let user = $(this).parent().parent().attr("id");
-        userReview.html(`
-            <div id="review"> ` + originalReview + `</div>
-        `);
+        userReview.html('<div class="whitespace" id="review">' + originalReview + '</div>');
         toggleButtons(true);
+        
 
     }); 
     
@@ -35,8 +32,8 @@ $("#editBtn").on("click", function(){
             dataType: "JSON",
             data: { "editedReview": editedReview, "username": user},
             success: function(result,status) {
-                toggleButtons(false);
-                userReview.html('<div>' + editedReview + '</div>');
+                toggleButtons(true);
+                userReview.html('<div class="whitespace" id="review">' + editedReview + '</div>');
                 if (!didEditBefore) {
                    userReview.append('<span><i> (Edited)</i></span>'); 
                 }
