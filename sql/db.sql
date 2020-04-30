@@ -35,13 +35,13 @@ CREATE TABLE `reviews` (
 
 
 INSERT INTO `reviews` (`ISBN`, `username`, `review`, `date`, `edit`) VALUES
-(9780544115552, 'connor', "Temporary Hobbit review for testing.", '2020-04-10 12:45:54', 0),
-(9781781100486, 'connor', "Temporary Harry Potter review for testing.", '2020-04-10 12:45:54', 0),
-(9780441013593, 'connor', "Temporary Dune review for testing.", '2020-04-10 12:45:54', 0),
-(9780375760303, 'connor', "Temporary CoMC review for testing.", '2020-04-10 12:45:54', 0),
-(9781593278519, 'cathy', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-10 10:05:54', 0),
-(9781593278519, 'connor', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-28 09:45:09', 0),
-(9781593278519, 'admin', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-16 07:25:54', 0);
+(9780544115552, 'Connor', "Temporary Hobbit review for testing.", '2020-04-10 12:45:54', 0),
+(9781781100486, 'Connor', "Temporary Harry Potter review for testing.", '2020-04-10 12:45:54', 0),
+(9780441013593, 'Connor', "Temporary Dune review for testing.", '2020-04-10 12:45:54', 0),
+(9780375760303, 'Connor', "Temporary CoMC review for testing.", '2020-04-10 12:45:54', 0),
+(9781593278519, 'Connor', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-10 10:05:54', 0),
+(9781593278519, 'Admin', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-28 09:45:09', 0),
+(9781593278519, 'Cathy', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-16 07:25:54', 0);
 
 
 DROP TABLE IF EXISTS `users`;
