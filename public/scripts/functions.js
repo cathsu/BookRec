@@ -1,33 +1,71 @@
 $("#editBtn").on("click", function(){
     console.log("Editing!");
     let user = $(this).parent().parent().attr("id"); 
+    let userReview =  $("#" + user + ' > #review'); 
     let originalReview = $("#" + user + "> #review").text().trim();
     console.log("original Review = " + originalReview);
-    $("#" + user + ' > #review').html(`
-        <textarea class="form-control" name="review" id="review" rows="5" required>`+ originalReview + `</textarea>
+    userReview.html(`
+        <textarea class="form-control" name="editedReview" id="editedReview" rows="5" required>`+ originalReview + `</textarea>
     `);
-    $("#deleteBtn").hide();
-    $("#editBtn").hide();
-    $("#submitEditBtn").attr("hidden", false); 
-    $("#cancelEditBtn").attr("hidden", false);
+    // $("#deleteBtn").hide();
+    // $("#editBtn").hide();
+    // $("#submitEditBtn").attr("hidden", false); 
+    // $("#cancelEditBtn").attr("hidden", false);
+    toggleButtons(false);
     console.log( $("#buttons > #cancelEditBtn").attr("id"));
     
+    let didEditBefore = $("#" + user + "> #edit").length > 0? true: false;     
+    console.log(didEditBefore);
     $("#cancelEditBtn").on("click", function() {
-        let user = $(this).parent().parent().attr("id");
-        $("#" + user + ' > #review').html(`
+        // let user = $(this).parent().parent().attr("id");
+        userReview.html(`
             <div id="review"> ` + originalReview + `</div>
         `);
-        $("#deleteBtn").show();
-        $("#editBtn").show();
-        $("#submitEditBtn").attr("hidden", true);  
-        $("#cancelEditBtn").attr("hidden", true); 
+        toggleButtons(true);
+
     }); 
     
     $("#submitEditBtn").on("click", function() {
-        //AJAX CALL
+        let isbn = $(this).parent().parent().find("#isbn").val();
+        let editedReview = $("#editedReview").val(); 
+        
+        $.ajax({
+            method: "PUT",
+            url: "/review/" + isbn, 
+            dataType: "JSON",
+            data: { "editedReview": editedReview, "username": user},
+            success: function(result,status) {
+                toggleButtons(false);
+                userReview.html('<div>' + editedReview + '</div>');
+                if (!didEditBefore) {
+                   userReview.append('<span><i> (Edited)</i></span>'); 
+                }
+                
+            }, 
+            
+            error: function(error,status) {
+              
+                 alert(error);
+            }
+            
+        });//ajax
+
     })
     
 }); 
+
+function toggleButtons(bool) {
+    if (bool) {
+        $("#deleteBtn").show();
+        $("#editBtn").show();
+        
+    } else {
+        $("#deleteBtn").hide();
+        $("#editBtn").hide();
+    }
+    $("#submitEditBtn").attr("hidden", bool);  
+    $("#cancelEditBtn").attr("hidden", bool); 
+}
 
 
 // $("#reviewForm").submit(function(event) {

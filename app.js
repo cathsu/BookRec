@@ -104,30 +104,6 @@ app.get("/", function(req, res){
     res.render("home.ejs", {user: req.session.user});
 });
 
-<<<<<<< HEAD
-=======
-// title=A+&author=&subject=Criticism - no image, long title
-// https://www.googleapis.com/books/v1/volumes?q=intitle:Harry%20Potter+inauthor:JK%20Rowling+subject:'' -> no books found
-// https://www.googleapis.com/books/v1/volumes?q=intitle:Harry%20Potter+inauthor:+subject: -> no books found
-// https://www.googleapis.com/books/v1/volumes?q=intitle:Harry%20Potter+inauthor:JK%20Rowling+subject:  -> books found
-
-app.get("/results", async function(req, res){
-    res.locals.user = req.session.username;
-    let params = getParameters(req); 
-    let books = await getResults(params);
-    // console.log('in results');
-    // console.log(results.hasOwnProperty("imageLinks"));
-    let count = 0; 
-    // results.items.forEach(function(r) {
-    //     console.log(r.volumeInfo.industryIdentifiers[0].hasOwnProperty("identifier")); 
-    //     console.log(count);
-    //     console.log(r.volumeInfo.title);
-        
-    //     count ++; 
-    // })
-    res.render("results.ejs", {books: books, user: req.session.user});
-});
-
 app.get("/signup", function(req, res){
     res.render("signup.ejs", {user: req.session.user});
 });
@@ -136,80 +112,6 @@ app.get("/login", function(req, res){
     res.render("login.ejs", {error: false, user: req.session.user});
 });
 
-
-// https://www.googleapis.com/books/v1/volumes?q=subject:student -> [1] has no ISBN
-// https://www.googleapis.com/books/v1/volumes?q=intitle:The%20Distribution%20of%20Mexico%27s%20Public%20Spending%20on%20Education+inauthor:Gladys%20Lopez%20Acevedo+Angel%20Salinas
-app.get("/results/:ISBN", async function(req, res){
-    res.locals.user = req.session.username;
-    let results = await getResults('q=isbn:'+req.params.ISBN);
-    console.log(results);
-    let book =  await getBookInfo(results.items[0]); 
-    // console.log(JSON.stringify(book));
-    console.log(book);
-    let reviews = await getReviews(req.params.ISBN); 
-    console.log(reviews);
-    // console.log("username = " + req.session.username);
-    let usersWhoLeftReviews = await checkUserReviews(req.params.ISBN, "cathy"); 
-    let hasUserLeftReview = usersWhoLeftReviews.length > 0 ? true: false; 
-    console.log("userLeftReview = " + hasUserLeftReview);
-    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, user: "cathy", hasUserLeftReview: hasUserLeftReview, user: req.session.user});
-});
-
-function checkUserReviews(ISBN, user) {
-    let stmt = 'SELECT username FROM reviews WHERE ISBN=? AND username=?';
-    return new Promise(function(resolve, reject){
-       connection.query(stmt, [ISBN, user], function(error, results){
-           if(error) throw error;
-           console.log(results);
-           resolve(results);
-       }); 
-    });
-}
-function getReviews(ISBN) {
-    let stmt = 'SELECT * FROM reviews WHERE ISBN=? ORDER by date';
-    return new Promise(function(resolve, reject){
-       connection.query(stmt, [ISBN], function(error, results){
-           if(error) throw error;
-           resolve(results);
-       }); 
-    });
-    
-}
-
-
-app.post("/addreview/:ISBN", function(req, res) {
-    console.log(req.body.newReview);
-    let datetime = moment().format(); 
-    console.log(req.body);
-    addReview(req, datetime);
-    res.redirect("/results/" + req.params.ISBN); 
-    // res.json({
-    //     newReview: req.body.newReview, 
-    //     username: req.body.username, 
-    //     datetime: moment(datetime).fromNow()
-    // }); 
-}); 
-
-
-function addReview(req, datetime) {
-    let stmt = 'INSERT INTO reviews (ISBN, username, review, date) VALUES (?, ?, ?, ?)'; 
-    let data = [req.params.ISBN, req.body.username, req.body.newReview, datetime]; 
-    console.log(data);
-    connection.query(stmt, data, function(error, result){
-           if(error) throw error;
-           else {
-               connection.query('SELECT * from reviews', function(error, result) {
-                   if (error) throw error; 
-                   else {
-                       console.log(result);
-                   }
-               })
-           }
-    });
-}
-
-
->>>>>>> 2ea9ae86f75dbcf1e27b6129c5ef8ae7d1a145ba
 app.post("/populateCards", function(req, res) {
     let statement =  'select * from featured_books';
     console.log(req.body.card1);
@@ -232,38 +134,9 @@ app.post("/populateCards", function(req, res) {
 });//route
 
 
-<<<<<<< HEAD
 ///////////////////////////// SIGN UP/LOGIN //////////////////////////////////
-app.get("/signup", function(req, res){
-    res.locals.user = req.session.username;
-    res.render("signup.ejs");
-});
 
-app.get("/login", function(req, res){
-    res.locals.user = req.session.username;
-    res.render("login.ejs", {"invalid": false});
-});
-
-app.post('/loginSession', function(req, res){
-    let statement = 'select * from users where username=\'' 
-                    + req.body.username + '\' and password=\''
-                    + req.body.password + '\';';
-    connection.query(statement, function(error, found){
-	    if(error) throw error;
-	    if(found.length){
-	        req.session.authenticated = true;
-	       // req.session.user = req.body.username;
-            req.session.username = req.body.username;
-            res.locals.user = req.session.username;
-            res.render("home.ejs");
-	    } else {
-            res.render("login.ejs", {"invalid": true});
-        }//found.length
-    });//connection
-});//route
-=======
->>>>>>> 2ea9ae86f75dbcf1e27b6129c5ef8ae7d1a145ba
-
+/* WHERE SIGNUP/LOGIN SHOULD GO */
 
 
 ///////////////////////////// RESULTS //////////////////////////////////
@@ -286,19 +159,28 @@ app.get("/results/:ISBN", async function(req, res){
     let reviews = await getReviews(req.params.ISBN); 
     console.log(reviews);
     // console.log("username = " + req.session.username);
-    let usersWhoLeftReviews = await checkUserReviews(req.params.ISBN, null); 
+    let usersWhoLeftReviews = await checkUserReviews(req.params.ISBN, "cathy"); 
     let hasUserLeftReview = usersWhoLeftReviews.length > 0 ? true: false; 
     console.log("userLeftReview = " + hasUserLeftReview);
-    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, user: null, hasUserLeftReview: hasUserLeftReview});
+    res.render("singleResult.ejs", {book: book, ISBN: req.params.ISBN, moment:moment, reviews: reviews, user: "cathy", hasUserLeftReview: hasUserLeftReview});
 });
 
-app.post("/addreview/:ISBN", function(req, res) {
+app.post("/review/:ISBN", async function(req, res) {
     console.log(req.body.newReview);
     let datetime = moment().format(); 
     console.log(req.body);
-    addReview(req, datetime);
+    await addReview(req, datetime);
     res.redirect("/results/" + req.params.ISBN); 
 }); 
+
+app.put("/review/:ISBN", async function(req, res) {
+    console.log(req.body); 
+    await editReview(req);
+    res.json ({
+        OK: "OK"
+    }); 
+    
+});
 
 
 app.listen(process.env.PORT || port, function(){
@@ -460,17 +342,26 @@ function addReview(req, datetime) {
     let stmt = 'INSERT INTO reviews (ISBN, username, review, date, edit) VALUES (?, ?, ?, ?, ?)'; 
     let data = [req.params.ISBN, req.body.username, req.body.newReview, datetime, 0]; 
     console.log(data);
-    connection.query(stmt, data, function(error, result){
+    return new Promise(function(resolve, reject){
+       connection.query(stmt, data, function(error, result){
            if(error) throw error;
-           else {
-               connection.query('SELECT * from reviews', function(error, result) {
-                   if (error) throw error; 
-                   else {
-                       console.log(result);
-                   }
-               })
-           }
-    }); //connection
+           resolve(result);
+        }); //connection
+    }); //Promise
 } //addReview
+
+function editReview(req) {
+    let stmt = 'UPDATE reviews ' + 
+                'SET review = ?, edit = ? ' + 
+                'WHERE ISBN = ? and username = ?'; 
+    let data = [req.body.editedReview, 1, req.params.ISBN, req.body.username];
+    return new Promise(function(resolve, reject){
+       connection.query(stmt, data, function(error, results){
+           if(error) throw error;
+           resolve(results);
+       }); //connection 
+    }); //Promise
+} //editReviews
+
 
 

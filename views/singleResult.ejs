@@ -28,6 +28,7 @@
     <div id="reviews" class="pb-4 pt-2 reviews">
         <%reviews.forEach(function(review) {%>
             <div id=<%=review.username%>>
+                <input type="hidden" id="isbn" value="<%=ISBN%>">
                 <div class="heading row">    
                     <div class="col">
                         <%=review.username%>
@@ -37,6 +38,9 @@
                     </div>
                 </div>
                 <div id="review"><%=review.review%></div>
+                <%if (review.edit == 1) {%>
+                    <span id="edit"><i>(Edited)</i></span>
+                <%}%>
                 <%if (review.username == user) {%>
                     <div id="buttons" class="align">
                         <button id="editBtn" input type="submit" class="btn btn-primary btn-sm">Edit</button>
@@ -52,11 +56,11 @@
 
     <!--only show textbox if user has logged in AND has not left a review-->
     <%if (user && !hasUserLeftReview) {%>
-        <form id="reviewForm" action="/addreview/<%=ISBN%>" method="POST" >
+        <form id="reviewForm" action="/review/<%=ISBN%>" method="POST" >
             <!--<input type="hidden" id="isbn" value="<%=ISBN%>">-->
             <input type="hidden" name="username" value="<%=user%>">
             <div class="form-group">
-                <label for="newReview">Write a review!</label>
+                <label for="newReview">Write a review (less than 500 characters long)!</label>
                 <textarea class="form-control" name="newReview" id="newReview" rows="5" required></textarea>
             </div>
             <button input type="submit" class="btn btn-success btn-sm">Submit</button>
