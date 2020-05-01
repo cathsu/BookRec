@@ -1,4 +1,4 @@
-# <img src="https://i.imgur.com/h1ZmVbi.png" alt="alt text" width="60" height="35"> BookRec 
+# <img src="" alt="alt text" width="60" height="35"> BookRec 
   
 ### BookRec is a website created for user submitted book recommendations and reviews.
 ### [Github Repository](https://github.com/cathsu/BookRec)
