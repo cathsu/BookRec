@@ -9,16 +9,17 @@ DROP TABLE IF EXISTS `featured_books`;
 CREATE TABLE `featured_books` (
   `ISBN` bigint(13) NOT NULL,
   `title` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(100) COLLATE utf8_unicode_ci NOT NULL
+  `description` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `img` varchar(100) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 
-INSERT INTO `featured_books` (`ISBN`, `title`, `description`) VALUES
-(9780544115552, 'The Hobbit', 'A timeless classic, from the father of the high fantasy genre.'),
-(9781781100486, 'Harry Potter and the Sorcerer''s Stone', 'The novel that started a generation of magic and adventure.'),
-(9780441013593, 'Dune', 'A triumph of the imagination and one of the bestselling science fiction novels of all time.'),
-(9780375760303, 'The Count of Monte Cristo', 'A dramatic tale of adventure, revenge, and romance');
+INSERT INTO `featured_books` (`ISBN`, `title`, `description`, `img`) VALUES
+(9780544115552, 'The Hobbit', 'A timeless classic, from the father of the high fantasy genre.', 'https://m.media-amazon.com/images/I/5187PQgDScL._SY346_.jpg'),
+(9781781100486, 'Harry Potter and the Sorcerer''s Stone', 'The novel that started a generation of magic and adventure.', 'https://m.media-amazon.com/images/I/41lnLrvBnML.jpg'),
+(9780441013593, 'Dune', 'A triumph of the imagination and one of the bestselling science fiction novels of all time.', 'https://i2.wp.com/www.tor.com/wp-content/uploads/2019/07/Dune-cover-1.jpg?type=vertical&ssl=1'),
+(9781409077688, 'The Count of Monte Cristo', 'A dramatic tale of adventure, revenge, and romance', 'https://images-na.ssl-images-amazon.com/images/I/41jRw4Gj-lL._SX323_BO1,204,203,200_.jpg');
 
 
 DROP TABLE IF EXISTS `reviews`;

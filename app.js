@@ -30,6 +30,9 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+Number.prototype.mod = function(n) {
+    return ((this%n)+n)%n;
+};
 
 /* MIDDLEWARE */
 function isAuthenticated(req, res){
@@ -59,15 +62,30 @@ function checkPassword(password, hash){
 
 
 ///////////////////////////// HOME //////////////////////////////////
-app.get("/", function(req, res){
+app.get("/", async function(req, res){
+    let cards = await genCards();
     console.log("Session user: ", req.session.user);   
-    res.render("home.ejs", {user: req.session.user});
+    res.render("home.ejs", {user: req.session.user, featured: cards});
 });
 
-
-app.post("/populateCards", function(req, res) {
+function genCards() {
     let statement =  'select * from featured_books';
-    console.log(req.body.card1);
+    return new Promise(function(resolve, reject){
+        connection.query(statement, function(error, found){
+    	    if(error) throw error;
+	        let cards = [];
+	        let index = _.random(found.length);
+            cards.push(found[(index+1)%found.length]);
+            cards.push(found[(index+2)%found.length]);
+            cards.push(found[(index+3)%found.length]);
+            resolve(cards);
+        });//connection
+    }); //Promise
+}
+
+app.post("/backCards", function(req, res) {
+    let statement =  'select * from featured_books';
+    console.log("Card1 value: ", req.body.card1);
     connection.query(statement, function(error, found){
 	    if(error) throw error;
 	    if(found.length){
@@ -75,18 +93,39 @@ app.post("/populateCards", function(req, res) {
 	        let card1 = req.body.card1;
 	        found.forEach(function(item, index){
 	           if(item.title == card1){
-    	           cards[0] = found[(index+1)%found.length];
-    	           cards[1] = found[(index+2)%found.length];
-    	           cards[2] = found[(index+3)%found.length];
+    	           cards[0] = found[(index+1).mod(found.length)];
+    	           cards[1] = found[(index+2).mod(found.length)];
+    	           cards[2] = found[(index+3).mod(found.length)];
 	           }
 	        });
-	        console.log(cards);
             res.send(cards);
 	    }//found.length
     });//connection
 });//route
 
-
+app.post("/forwardCards", function(req, res) {
+    let statement =  'select * from featured_books';
+    console.log("Card1 value: ", req.body.card1);
+    connection.query(statement, function(error, found){
+	    if(error) throw error;
+	    if(found.length){
+	        let cards = [];
+	        let card1 = req.body.card1;
+	        found.forEach(function(item, index){
+	           if(item.title == card1){
+	               console.log(found.length);
+	               console.log((index-1).mod(found.length));
+	               console.log((index-2).mod(found.length));
+	               console.log((index-3).mod(found.length));
+    	           cards[0] = found[(index-1).mod(found.length)];
+    	           cards[1] = found[(index-2).mod(found.length)];
+    	           cards[2] = found[(index-3).mod(found.length)];
+	           }
+	        });
+            res.send(cards);
+	    }//found.length
+    });//connection
+});//route
 ///////////////////////////// SIGN UP/LOGIN //////////////////////////////////
 
 

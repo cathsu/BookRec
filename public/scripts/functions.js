@@ -121,37 +121,102 @@ function toggleButtons(bool) {
 //     });//ajax
 // }); 
 
-let nextBook = $("#nextBook");
-let prevBook = $("#prevBook");
 
-$(".forwardCard").click(function(){
-    console.log($("#card1").text());
+$("#forward").on("click", () => {
     $.ajax({
-        url: "/populateCards",
+        url: "/forwardCards",
         type: "POST",
         dataType: "JSON",
         data: {
-            "card1":$("#card1").text()
+            "card1":$(".card1 > .card-body > .card-title").text()
         },
-        success: function(data){
-            let res = data[0];
-            $.each(res, function(key, value) {
-                console.log(key, value);
-            });
+        success: function(data, status){
+            console.log(data);
+            $(".card1").attr("id", data[0].ISBN);
+            $(".card1 > .card-img-top").attr("src", data[0].img);
+            $(".card1 > .card-body > .card-title").text(data[0].title);
+            $(".card1 > .card-body > a").attr("href", "/results/"+data[0].ISBN);
+            
+            $(".card2").attr("id", data[1].ISBN);
+            $(".card2 > .card-img-top").attr("src", data[1].img);
+            $(".card2 > .card-body > .card-title").text(data[1].title);
+            $(".card2 > .card-body > a").attr("href", "/results/"+data[1].ISBN);
+            
+            $(".card3").attr("id", data[2].ISBN);
+            $(".card3 > .card-img-top").attr("src", data[2].img);
+            $(".card3 > .card-body > .card-title").text(data[2].title);
+            $(".card3 > .card-body > a").attr("href", "/results/"+data[2].ISBN);
         },
         error: function(e) {
             console.log("An error occurred during your request: " +  e.status + " " + e.statusText);
         }
-    }
-        
-    )
+    })
 });
 
-// $("#loginForm").submit(function() {
-//     console.log("validating user and pass: ");
-//     let login = $("#username");
-//     let password = $("#password");
-//     console.log(login, password);
-// }); 
+$("#back").on("click", () => {
+    $.ajax({
+        url: "/backCards",
+        type: "POST",
+        dataType: "JSON",
+        data: {
+            "card1":$(".card1 > .card-body > .card-title").text()
+        },
+        success: function(data, status){
+            console.log(data);
+            $(".card1").attr("id", data[0].ISBN);
+            $(".card1 > .card-img-top").attr("src", data[0].img);
+            $(".card1 > .card-body > .card-title").text(data[0].title);
+            $(".card1 > .card-body > a").attr("href", "/results/"+data[0].ISBN);
+            
+            $(".card2").attr("id", data[1].ISBN);
+            $(".card2 > .card-img-top").attr("src", data[1].img);
+            $(".card2 > .card-body > .card-title").text(data[1].title);
+            $(".card2 > .card-body > a").attr("href", "/results/"+data[1].ISBN);
+            
+            $(".card3").attr("id", data[2].ISBN);
+            $(".card3 > .card-img-top").attr("src", data[2].img);
+            $(".card3 > .card-body > .card-title").text(data[2].title);
+            $(".card3 > .card-body > a").attr("href", "/results/"+data[2].ISBN);
+        },
+        error: function(e) {
+            console.log("An error occurred during your request: " +  e.status + " " + e.statusText);
+        }
+    })
+});
 
 
+$(document).ready(function() { 
+    $(".card1").hover(function() { 
+        $(this).addClass("active-card"); 
+        $(".card2").addClass("inactive-card");
+        $(".card3").addClass("inactive-card");
+    }, function() { 
+        $(this).removeClass("active-card");
+        $(".card2").removeClass("inactive-card");
+        $(".card3").removeClass("inactive-card");
+    }); 
+}); 
+
+$(document).ready(function() { 
+    $(".card2").hover(function() { 
+        $(this).addClass("active-card"); 
+        $(".card1").addClass("inactive-card");
+        $(".card3").addClass("inactive-card");
+    }, function() { 
+        $(this).removeClass("active-card");
+        $(".card1").removeClass("inactive-card");
+        $(".card3").removeClass("inactive-card");
+    }); 
+}); 
+
+$(document).ready(function() { 
+    $(".card3").hover(function() { 
+        $(this).addClass("active-card"); 
+        $(".card1").addClass("inactive-card");
+        $(".card2").addClass("inactive-card");
+    }, function() { 
+        $(this).removeClass("active-card");
+        $(".card1").removeClass("inactive-card");
+        $(".card2").removeClass("inactive-card");
+    }); 
+}); 
