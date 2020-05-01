@@ -13,8 +13,6 @@ CREATE TABLE `featured_books` (
   `img` varchar(100) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
-
 INSERT INTO `featured_books` (`ISBN`, `title`, `description`, `img`) VALUES
 (9780544115552, 'The Hobbit', 'A timeless classic, from the father of the high fantasy genre.', 'https://m.media-amazon.com/images/I/5187PQgDScL._SY346_.jpg'),
 (9781781100486, 'Harry Potter and the Sorcerer''s Stone', 'The novel that started a generation of magic and adventure.', 'https://m.media-amazon.com/images/I/41lnLrvBnML.jpg'),

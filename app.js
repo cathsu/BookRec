@@ -61,7 +61,7 @@ function checkPassword(password, hash){
 }
 
 function checkSeededPassword(username, password) {
-    let stmt = 'SELECT * FROM users WHERE username=? AND password = ?';
+    let stmt = 'SELECT * FROM users WHERE username=? AND password=?';
     return new Promise(function(resolve, reject){
        connection.query(stmt, [username, password], function(error, results){
            if(error) throw error;
