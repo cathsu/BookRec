@@ -55,4 +55,20 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+INSERT INTO `users` (`username`, `password`, `admin`) VALUES 
+('Admin', 'Admin', 1),
+('Cathy1', 'Cathy1', 1),
+('Cathy2', 'Cathy1', 1),
+('Cathy3', 'Cathy1', 1),
+('Cathy4', 'Cathy1', 1),
+('Cathy5', 'Cathy1', 1),
+('Cathy6', 'Cathy1', 1),
+('Cathy7', 'Cathy1', 1),
+('Cathy8', 'Cathy1', 1),
+('Cathy9', 'Cathy1', 1),
+('Cathy10', 'Cathy1', 1),
+('Cathy11', 'Cathy1', 1),
+('Cathy12', 'Cathy1', 1),
+('Cathy12', 'Cathy1', 1),
+
 COMMIT;
