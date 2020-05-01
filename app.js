@@ -61,9 +61,9 @@ function checkPassword(password, hash){
 }
 
 function checkSeededPassword(username, password) {
-    let stmt = 'SELECT * FROM users WHERE username=? AND password=?';
+    let stmt = 'SELECT password FROM users WHERE username=?';
     return new Promise(function(resolve, reject){
-       connection.query(stmt, [username, password], function(error, results){
+       connection.query(stmt, [password], function(error, results){
            if(error) throw error;
            console.log("Result in checkSeededPassword: ", results);
            resolve(results);
@@ -152,7 +152,8 @@ app.post('/loginSession', async function(req, res){
     let userExists = await checkUsername(req.body.username);
     let hashedPassword = userExists.length > 0 ? userExists[0].password : '';
     let passwordMatch = await checkPassword(req.body.password, hashedPassword);
-    let seededPasswordMatch = await checkSeededPassword(req.body.username, req.body.password);
+    let seededPasswordExist= await checkSeededPassword(req.body.username, req.body.password);
+    let seededPasswordMatch = seededPasswordExist.length > 0 ? true: false;  
     console.log("Passowrds match results: ", passwordMatch);
 	if(passwordMatch || seededPasswordMatch){
 	    req.session.authenticated = true;
@@ -205,15 +206,16 @@ app.get("/results", async function(req, res){
 // 
 app.get("/results/:ISBN", async function(req, res){
     let results = await getResults('q=isbn:'+req.params.ISBN);
-    console.log(results);
+    // console.log(results);
     let book =  await getBookInfo(results.items[0]); 
     // console.log(JSON.stringify(book));
-    console.log(book);
+    // console.log(book);
     let reviews = await getReviews(req.params.ISBN); 
-    console.log(reviews);
+    // console.log(reviews);
     let usersWhoLeftReviews = await checkUserReviews(req.params.ISBN, req.session.user); 
     let hasUserLeftReview = usersWhoLeftReviews.length > 0 ? true: false; 
     console.log("Who left a review? = " + usersWhoLeftReviews);
+    console.log("user = " + req.session.user);
     res.render("singleResult.ejs", {
                     book: book, 
                     ISBN: req.params.ISBN, 

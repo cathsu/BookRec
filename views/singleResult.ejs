@@ -41,21 +41,24 @@
                 <%if (review.edit == 1) {%>
                     <span id="edit"><i>(Edited)</i></span>
                 <%}%>
-                <%if (review.username == user) {%>
+                
                     <div id="buttons" class="align">
-                        <button id="editBtn" input type="submit" class="btn btn-primary btn-sm">Edit</button>
-                        <button id="deleteBtn" input type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        <button id="submitEditBtn" input type="submit" class="btn btn-success btn-sm" hidden>Submit</button>
-                        <button id="cancelEditBtn" input type="submit" class="btn btn-danger btn-sm" hidden>Cancel</button>
+                        <%if (review.username == user) {%>
+                            <button id="editBtn" input type="submit" class="btn btn-primary btn-sm">Edit</button>
+                            <button id="submitEditBtn" input type="submit" class="btn btn-success btn-sm" hidden>Submit</button>
+                            <button id="cancelEditBtn" input type="submit" class="btn btn-danger btn-sm" hidden>Cancel</button>
+                        <%}%>
+                        <%if (review.username == user || user == "Admin") {%>
+                            <button id="deleteBtn" input type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        <%}%>
                     </div>
-                <%}%>
             </div>
             <hr>
         <%});%>
     </div>
 
     <!--only show textbox if user has logged in AND has not left a review-->
-    <%if (user && !hasUserLeftReview) {%>
+    <%if (user && user != "Admin" && !hasUserLeftReview) {%>
         <form id="reviewForm" action="/review/<%=ISBN%>" method="POST" >
             <!--<input type="hidden" id="isbn" value="<%=ISBN%>">-->
             <%console.log(user);%>
