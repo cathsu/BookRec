@@ -136,16 +136,19 @@ $("#forward").on("click", () => {
             $(".card1 > .card-img-top").attr("src", data[0].img);
             $(".card1 > .card-body > .card-title").text(data[0].title);
             $(".card1 > .card-body > a").attr("href", "/results/"+data[0].ISBN);
+            $(".card1 > .card-body > .card-text").text(data[0].description);
             
             $(".card2").attr("id", data[1].ISBN);
             $(".card2 > .card-img-top").attr("src", data[1].img);
             $(".card2 > .card-body > .card-title").text(data[1].title);
             $(".card2 > .card-body > a").attr("href", "/results/"+data[1].ISBN);
-            
+            $(".card2 > .card-body > .card-text").text(data[1].description);
+
             $(".card3").attr("id", data[2].ISBN);
             $(".card3 > .card-img-top").attr("src", data[2].img);
             $(".card3 > .card-body > .card-title").text(data[2].title);
             $(".card3 > .card-body > a").attr("href", "/results/"+data[2].ISBN);
+            $(".card3 > .card-body > .card-text").text(data[2].description);
         },
         error: function(e) {
             console.log("An error occurred during your request: " +  e.status + " " + e.statusText);
@@ -167,16 +170,20 @@ $("#back").on("click", () => {
             $(".card1 > .card-img-top").attr("src", data[0].img);
             $(".card1 > .card-body > .card-title").text(data[0].title);
             $(".card1 > .card-body > a").attr("href", "/results/"+data[0].ISBN);
-            
+            $(".card1 > .card-body > .card-text").text(data[0].description);
+
             $(".card2").attr("id", data[1].ISBN);
             $(".card2 > .card-img-top").attr("src", data[1].img);
             $(".card2 > .card-body > .card-title").text(data[1].title);
             $(".card2 > .card-body > a").attr("href", "/results/"+data[1].ISBN);
-            
+            $(".card2 > .card-body > .card-text").text(data[1].description);
+
             $(".card3").attr("id", data[2].ISBN);
             $(".card3 > .card-img-top").attr("src", data[2].img);
             $(".card3 > .card-body > .card-title").text(data[2].title);
             $(".card3 > .card-body > a").attr("href", "/results/"+data[2].ISBN);
+            $(".card3 > .card-body > .card-text").text(data[2].description);
+
         },
         error: function(e) {
             console.log("An error occurred during your request: " +  e.status + " " + e.statusText);
