@@ -35,7 +35,7 @@ $("#editBtn").on("click", function(){
                 toggleButtons(true);
                 userReview.html('<div class="whitespace" id="review">' + editedReview + '</div>');
                 if (!didEditBefore) {
-                   userReview.append('<span><i> (Edited)</i></span>'); 
+                   userReview.append('<span><i>(Edited)</i></span>'); 
                 }
                 
             }, 

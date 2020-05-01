@@ -60,6 +60,17 @@ function checkPassword(password, hash){
     });
 }
 
+function checkSeededPassword(username, password) {
+    let stmt = 'SELECT * FROM users WHERE username=? AND password = ?';
+    return new Promise(function(resolve, reject){
+       connection.query(stmt, [username, password], function(error, results){
+           if(error) throw error;
+           console.log("Result in checkSeededPassword: ", results);
+           resolve(results);
+       }); 
+    });
+}
+
 
 ///////////////////////////// HOME //////////////////////////////////
 app.get("/", async function(req, res){
@@ -141,8 +152,9 @@ app.post('/loginSession', async function(req, res){
     let userExists = await checkUsername(req.body.username);
     let hashedPassword = userExists.length > 0 ? userExists[0].password : '';
     let passwordMatch = await checkPassword(req.body.password, hashedPassword);
+    let seededPasswordMatch = await checkSeededPassword(req.body.username, req.body.password);
     console.log("Passowrds match results: ", passwordMatch);
-	if(passwordMatch){
+	if(passwordMatch || seededPasswordMatch){
 	    req.session.authenticated = true;
 	    req.session.user = userExists[0].username;
 	    res.redirect('/');
