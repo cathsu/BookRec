@@ -2,13 +2,11 @@ $("#editBtn").on("click", function(){
     console.log("Editing!");
     let user = $(this).parent().parent().attr("id"); 
     let userReview =  $("#" + user + ' > #review'); 
+    let editedReviewArea = $("#" + user + ' > #editedReviewArea');
     let originalReview = $("#" + user + "> #review").text();
+    userReview.text("");
     console.log("original Review = " + originalReview);
-    userReview.html('<textarea class="form-control" class="whitespace" name="editedReview" id="editedReview" rows="5" required>'+ originalReview + '</textarea>');
-    // $("#deleteBtn").hide();
-    // $("#editBtn").hide();
-    // $("#submitEditBtn").attr("hidden", false); 
-    // $("#cancelEditBtn").attr("hidden", false);
+    editedReviewArea.html('<textarea class="form-control" class="whitespace" name="editedReview" id="editedReview" rows="5" required>'+ originalReview + '</textarea>');
     toggleButtons(false);
     console.log( $("#buttons > #cancelEditBtn").attr("id"));
     
@@ -16,7 +14,10 @@ $("#editBtn").on("click", function(){
     console.log(didEditBefore);
     $("#cancelEditBtn").on("click", function() {
         // let user = $(this).parent().parent().attr("id");
-        userReview.html('<div class="whitespace" id="review">' + originalReview + '</div>');
+        userReview.text(originalReview);
+        editedReviewArea.text("");
+        // userReview.html('<div class="whitespace" id="review">' + originalReview + '</div>');
+        $(".errorMsg").empty();
         toggleButtons(true);
         
 
@@ -25,28 +26,56 @@ $("#editBtn").on("click", function(){
     $("#submitEditBtn").on("click", function() {
         let isbn = $(this).parent().parent().find("#isbn").val();
         let editedReview = $("#editedReview").val(); 
+        let errorMsg = $("#" + user + "> .errorMsg"); 
+        console.log(editedReview);
+
+       
+        if (!editedReview.length) { //&& !$("#noReview").length) {
+            console.log(1);
+            $(".errorMsg").empty();
+            errorMsg.html('Please write down something!'); 
+            // return;
+        }
         
-        $.ajax({
-            method: "PUT",
-            url: "/review/" + isbn, 
-            dataType: "JSON",
-            data: { "editedReview": editedReview, "username": user},
-            success: function(result,status) {
-                toggleButtons(true);
-                userReview.html('<div class="whitespace" id="review">' + editedReview + '</div>');
-                if (!didEditBefore) {
-                   userReview.append('<span><i>(Edited)</i></span>'); 
+
+        else if (editedReview === originalReview) { // && !$('#sameReview').length) {
+            console.log(3);
+            $(".errorMsg").empty();
+            errorMsg.html('Please write down something new!');
+        }
+
+        
+        else {                        
+
+            console.log(5);
+            console.log("edit = " + editedReview);
+            console.log("orignal = " + originalReview); 
+            console.log(editedReview == originalReview);
+            $.ajax({
+                method: "PUT",
+                url: "/review/" + isbn, 
+                dataType: "JSON",
+                data: { "editedReview": editedReview, "username": user},
+                success: function(result,status) {
+                    $(".errorMsg").empty();
+                    toggleButtons(true);
+                    editedReviewArea.text("");
+                    userReview.text(editedReview);
+                    originalReview = editedReview;
+                    if (!("#edit:contains('(Edited')")) {
+                        $("#" + user + "> edit").html("(Edited)"); 
+                    }
+
+                    
+                }, 
+                
+                error: function(error,status) {
+                  
+                     alert(error);
                 }
                 
-            }, 
-            
-            error: function(error,status) {
-              
-                 alert(error);
-            }
-            
-        });//ajax
-
+            });//ajax
+        }
     })
     
 }); 

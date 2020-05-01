@@ -38,9 +38,14 @@
                     </div>
                 </div>
                 <div class="whitespace" id="review"><%=review.review%></div>
+                <div id="editedReviewArea"></div>
+                <small class="errorMsg"></small>
+                <span id="edit"><i>
                 <%if (review.edit == 1) {%>
-                    <span id="edit"><i>(Edited)</i></span>
+                    (Edited)
                 <%}%>
+                </i></span>
+                
                 
                     <div id="buttons" class="align">
                         <%if (review.username == user) {%>
@@ -64,8 +69,9 @@
             <%console.log(user);%>
             <input type="hidden" name="username" value="<%=user%>">
             <div class="form-group">
-                <label for="newReview">Write a review (less than 500 characters long)!</label>
+                <label for="newReview">Write a review!</label>
                 <textarea class="form-control" class="whitespace" name="newReview" id="newReview" rows="5" required></textarea>
+                <small id="charsLeft">There are 500 characters left!</small>
             </div>
             <button input type="submit" class="btn btn-success btn-sm">Submit</button>
         </form>
