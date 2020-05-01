@@ -40,7 +40,7 @@
                 <div class="whitespace" id="review"><%=review.review%></div>
                 <div id="editedReviewArea"></div>
                 <small class="errorMsg" style="color:red;"></small>
-                <span id="edit" "><i>
+                <span id="edit"><i>
                 <%if (review.edit == 1) {%>
                     (Edited)
                 <%}%>
@@ -64,14 +64,14 @@
 
     <!--only show textbox if user has logged in AND has not left a review-->
     <%if (user && user != "Admin" && !hasUserLeftReview) {%>
-        <form id="reviewForm" action="/review/<%=ISBN%>" method="POST" >
+        <form id="reviewForm" action="/review/<%=ISBN%>" method="POST" onclick="return !hasExceededCharLimit('#newReview','#charsLeft');">
             <!--<input type="hidden" id="isbn" value="<%=ISBN%>">-->
             <%console.log(user);%>
             <input type="hidden" name="username" value="<%=user%>">
             <div class="form-group">
                 <label for="newReview">Write a review!</label>
                 <textarea class="form-control" class="whitespace" name="newReview" id="newReview" rows="5" required></textarea>
-                <small id="charsLeft">There are 500 characters left!</small>
+                <small id="charsLeft"></small>
             </div>
             <button input type="submit" class="btn btn-success btn-sm">Submit</button>
         </form>

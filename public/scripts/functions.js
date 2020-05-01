@@ -84,6 +84,33 @@ $("#editBtn").on("click", function(){
     
 }); 
 
+
+// keep track of remaining number of characters available in review
+$("#newReview").on("keyup", function () {
+    hasExceededCharLimit("#newReview", "#charsLeft"); 
+}); 
+
+function hasExceededCharLimit(review, msg) {
+    const MAX_CHARS = 10; 
+    let currentLength = $(review).val().length; 
+    console.log(currentLength); 
+    let charsLeft = MAX_CHARS-currentLength; 
+    if (charsLeft == 0) {
+        $(msg).text("You've reached the limit!");
+        return false; 
+    } else if (charsLeft < 0) {
+        let charsOver = currentLength - MAX_CHARS; 
+        $(msg).text("You've gone " + charsOver + " characters over the limit!");
+        return true;
+    } else {
+        $(msg).text("You have " + charsLeft + " characters left!");
+        return false;
+    }
+    
+    
+}
+
+
 $("#deleteBtn").on("click", function(){
     console.log("Deleting!");
     let user = $(this).parent().parent().attr("id"); 
