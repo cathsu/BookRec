@@ -7,6 +7,10 @@ $("#editBtn").on("click", function(){
     userReview.text("");
     console.log("original Review = " + originalReview);
     editedReviewArea.html('<textarea class="form-control" class="whitespace" name="editedReview" id="editedReview" rows="5" required>'+ originalReview + '</textarea>');
+    $("#editedReview").on("keyup", function() {
+        $(".errorMsg").empty();
+        hasExceededCharLimit("#editedReview", "#editedCharsLeft");
+    }); 
     toggleButtons(false);
     console.log( $("#buttons > #cancelEditBtn").attr("id"));
     
@@ -18,6 +22,7 @@ $("#editBtn").on("click", function(){
         editedReviewArea.text("");
         // userReview.html('<div class="whitespace" id="review">' + originalReview + '</div>');
         $(".errorMsg").empty();
+        $("#editedCharsLeft").empty();
         toggleButtons(true);
         
 
@@ -29,10 +34,13 @@ $("#editBtn").on("click", function(){
         let errorMsg = $("#" + user + "> .errorMsg"); 
         console.log(editedReview);
 
-       
-        if (!editedReview.length) { //&& !$("#noReview").length) {
+        if (hasExceededCharLimit("#editedReview", '#editedCharsLeft')) {
+            $(".errorMsg").empty();
+        }
+        else if (!editedReview.length) { //&& !$("#noReview").length) {
             console.log(1);
             $(".errorMsg").empty();
+            $("#editedCharsLeft").empty(); 
             errorMsg.html('Please write down something!'); 
             // return;
         }
@@ -41,6 +49,7 @@ $("#editBtn").on("click", function(){
         else if (editedReview === originalReview) { // && !$('#sameReview').length) {
             console.log(3);
             $(".errorMsg").empty();
+            $("#editedCharsLeft").empty(); 
             errorMsg.html('Please write down something new!');
         }
 
@@ -58,6 +67,7 @@ $("#editBtn").on("click", function(){
                 data: { "editedReview": editedReview, "username": user},
                 success: function(result,status) {
                     $(".errorMsg").empty();
+                    $("#editedCharsLeft").empty(); 
                     toggleButtons(true);
                     editedReviewArea.text("");
                     userReview.text(editedReview);
