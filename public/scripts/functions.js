@@ -10,7 +10,7 @@ $("#editBtn").on("click", function(){
     toggleButtons(false);
     console.log( $("#buttons > #cancelEditBtn").attr("id"));
     
-    let didEditBefore = $("#" + user + "> #edit").length > 0? true: false;     
+    let didEditBefore = $("#" + user + "> #edit").text().trim().length > 0? true: false;     
     console.log(didEditBefore);
     $("#cancelEditBtn").on("click", function() {
         // let user = $(this).parent().parent().attr("id");
@@ -61,9 +61,13 @@ $("#editBtn").on("click", function(){
                     toggleButtons(true);
                     editedReviewArea.text("");
                     userReview.text(editedReview);
+                    
+                    // set original review to editedreview
                     originalReview = editedReview;
-                    if (!("#edit:contains('(Edited')")) {
-                        $("#" + user + "> edit").html("(Edited)"); 
+                    console.log("didEditBefore = " + didEditBefore);
+                    console.log($("#" + user + "> #edit").text());
+                    if (!didEditBefore) {
+                        $("#" + user + "> #edit").text("(Edited)"); 
                     }
 
                     
