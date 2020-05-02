@@ -145,18 +145,19 @@ app.post('/loginSession', async function(req, res){
     let userExists = await checkUsername(req.body.username);
     if (!userExists) {
         res.render('login.ejs', {error: true, user: req.session.user});
-    } 
-    let hashedPassword = userExists.length > 0 ? userExists[0].password : '';
-    let passwordMatch = await checkPassword(req.body.password, hashedPassword);
-    let seededPasswordExist= await checkSeededPassword(req.body.username, req.body.password);
-    let seededPasswordMatch = seededPasswordExist.length > 0 ? true: false;  
-	if(passwordMatch || seededPasswordMatch){
-	    req.session.authenticated = true;
-	    req.session.user = userExists[0].username;
-	    res.redirect('/');
-	} else {
-	    res.render('login.ejs', {error: true, user: req.session.user});
-	}
+    } else {
+        let hashedPassword = userExists.length > 0 ? userExists[0].password : '';
+        let passwordMatch = await checkPassword(req.body.password, hashedPassword);
+        let seededPasswordExist= await checkSeededPassword(req.body.username, req.body.password);
+        let seededPasswordMatch = seededPasswordExist.length > 0 ? true: false;  
+    	if(passwordMatch || seededPasswordMatch){
+    	    req.session.authenticated = true;
+    	    req.session.user = userExists[0].username;
+    	    res.redirect('/');
+    	} else {
+    	    res.render('login.ejs', {error: true, user: req.session.user});
+    	}
+    }
 });
 
 app.post('/register', function(req, res){
@@ -380,7 +381,6 @@ function getReviews(ISBN) {
 function addReview(req, datetime) {
     let stmt = 'INSERT INTO reviews (ISBN, username, review, date, edit) VALUES (?, ?, ?, ?, ?)'; 
     let data = [req.params.ISBN, req.session.user, req.body.newReview, datetime, 0]; 
-    console.log(data);
     return new Promise(function(resolve, reject){
        connection.query(stmt, data, function(error, result){
            if(error) throw error;
