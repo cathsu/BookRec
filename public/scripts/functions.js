@@ -1,14 +1,16 @@
 $("#editBtn").on("click", function(){
     let user = $(this).parent().parent().attr("id"); 
+    console.log(user);
     let userReview =  $("#" + user + ' > #review'); 
     let editedReviewArea = $("#" + user + ' > #editedReviewArea');
     let originalReview = $("#" + user + "> #review").text();
     userReview.text("");
     console.log("original Review = " + originalReview);
+    let userEditedCharsLeftStr = "#" + user + "> #editedCharsLeft"; 
     editedReviewArea.html('<textarea class="form-control" class="whitespace" name="editedReview" id="editedReview" rows="5" required>'+ originalReview + '</textarea>');
     $("#editedReview").on("keyup", function() {
         $(".errorMsg").empty();
-        hasExceededCharLimit("#editedReview", "#editedCharsLeft");
+        hasExceededCharLimit("#editedReview", userEditedCharsLeftStr);
     }); 
     toggleButtons(false);
     console.log( $("#buttons > #cancelEditBtn").attr("id"));
@@ -21,7 +23,7 @@ $("#editBtn").on("click", function(){
         editedReviewArea.text("");
         // userReview.html('<div class="whitespace" id="review">' + originalReview + '</div>');
         $(".errorMsg").empty();
-        $("#editedCharsLeft").empty();
+        $(userEditedCharsLeftStr).empty();
         toggleButtons(true);
         
 
@@ -33,13 +35,13 @@ $("#editBtn").on("click", function(){
         let errorMsg = $("#" + user + "> .errorMsg"); 
         console.log(editedReview);
 
-        if (hasExceededCharLimit("#editedReview", '#editedCharsLeft')) {
+        if (hasExceededCharLimit("#editedReview", userEditedCharsLeftStr)) {
             $(".errorMsg").empty();
         }
         else if (!editedReview.length) { //&& !$("#noReview").length) {
             console.log(1);
             $(".errorMsg").empty();
-            $("#editedCharsLeft").empty(); 
+            $(userEditedCharsLeftStr).empty(); 
             errorMsg.html('Please write down something!'); 
             // return;
         }
@@ -48,7 +50,7 @@ $("#editBtn").on("click", function(){
         else if (editedReview === originalReview) { // && !$('#sameReview').length) {
             console.log(3);
             $(".errorMsg").empty();
-            $("#editedCharsLeft").empty(); 
+            $(userEditedCharsLeftStr).empty(); 
             errorMsg.html('Please write down something new!');
         }
 
@@ -66,7 +68,7 @@ $("#editBtn").on("click", function(){
                 data: { "editedReview": editedReview, "username": user},
                 success: function(result,status) {
                     $(".errorMsg").empty();
-                    $("#editedCharsLeft").empty(); 
+                    $(userEditedCharsLeftStr).empty(); 
                     toggleButtons(true);
                     editedReviewArea.text("");
                     userReview.text(editedReview);
@@ -102,7 +104,7 @@ $("#newReview").on("keyup", function () {
 function hasExceededCharLimit(review, msg) {
     const MAX_CHARS = 500; 
     let currentLength = $(review).val().length; 
-    console.log(currentLength); 
+    // console.log(currentLength); 
     let charsLeft = MAX_CHARS-currentLength; 
     
     if (charsLeft == 0) {
