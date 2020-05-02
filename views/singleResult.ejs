@@ -26,7 +26,10 @@
 <div class="container col-md-8 offset-md-2">
     <h2 class="text-center"><strong>Reviews</strong></h2>
     <%if (!reviews.length && !user) {%>
-        <h3 class="text-center">There are no reviews yet! Sign up or login to leave a review</h3>
+        <h3 class="text-center">There are no reviews yet! <a href="/signup">Sign up</a> or <a href="/login">login</a> to leave a review</h3>
+    <%}%>
+    <%if (!reviews.length && user == "Admin") {%>
+        <h3 class="text-center">There are no reviews yet!</h3>
     <%}%>
     <div id="reviews" class="pb-4 pt-2 reviews">
         <%reviews.forEach(function(review) {%>
