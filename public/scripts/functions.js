@@ -125,7 +125,7 @@ function hasExceededCharLimit(review, msg) {
 }
 
 
-$("#deleteBtn").on("click", function(){
+$("button[name='deleteBtn']").on("click", function(){
     console.log("Deleting!");
     let user = $(this).parent().parent().attr("id"); 
     console.log("user = " + user);

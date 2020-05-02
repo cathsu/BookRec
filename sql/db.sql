@@ -36,13 +36,12 @@ CREATE TABLE `reviews` (
 
 
 INSERT INTO `reviews` (`ISBN`, `username`, `review`, `date`, `edit`) VALUES
-(9780544115552, 'Connor', "Temporary Hobbit review for testing.", '2020-04-10 12:45:54', 0),
-(9781781100486, 'Connor', "Temporary Harry Potter review for testing.", '2020-04-10 12:45:54', 0),
-(9780441013593, 'Connor', "Temporary Dune review for testing.", '2020-04-10 12:45:54', 0),
-(9780375760303, 'Connor', "Temporary CoMC review for testing.", '2020-04-10 12:45:54', 0),
-(9781593278519, 'Connor', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-10 10:05:54', 0),
-(9781593278519, 'Admin', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-28 09:45:09', 0),
-(9781593278519, 'Cathy', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-16 07:25:54', 0);
+(9780544115552, 'Connor1', "Temporary Hobbit review for testing.", '2020-04-10 12:45:54', 0),
+(9781781100486, 'Connor1', "Temporary Harry Potter review for testing.", '2020-04-10 12:45:54', 0),
+(9780441013593, 'Connor1', "Temporary Dune review for testing.", '2020-04-10 12:45:54', 0),
+(9780375760303, 'Connor1', "Temporary CoMC review for testing.", '2020-04-10 12:45:54', 0),
+(9781593278519, 'Connor1', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-10 10:05:54', 0),
+(9781593278519, 'Cathy1', 'Lorem ipsum dolor sit amet, est ex wisi dicta oportere, pro cu duis luptatum. Per ea ullum ubique suscipit. Id affert disputando per, id odio vocent omittantur vix, erat illum aperiam mel et. Ei putant erroribus efficiendi cum, pri viris vulputate no, ludus munere ei cum. Munere doctus in eum.', '2020-04-16 07:25:54', 0);
 
 
 DROP TABLE IF EXISTS `users`;
@@ -55,25 +54,25 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-INSERT INTO `users` (`username`, `password`, `admin`) VALUES 
-('Admin', 'Admin', 1),
-('Cathy1', 'Cathy1', 1),
-('Cathy2', 'Cathy1', 1),
-('Cathy3', 'Cathy1', 1),
-('Cathy4', 'Cathy1', 1),
-('Cathy5', 'Cathy1', 1),
-('Cathy6', 'Cathy1', 1),
-('Cathy7', 'Cathy1', 1),
-('Cathy8', 'Cathy1', 1),
-('Cathy9', 'Cathy1', 1),
-('Cathy10', 'Cathy1', 1),
-('Connor1', 'Connor1', 1),
-('Connor2', 'Connor1', 1),
-('Connor3', 'Connor1', 1),
-('Connor4', 'Connor1', 1),
-('Connor5', 'Connor1', 1),
-('Connor6', 'Connor1', 1),
-('Connor7', 'Connor1', 1),
-('Connor8', 'Connor1', 1),
-('Connor9', 'Connor1', 1);
+INSERT INTO `users` (`username`, `password`) VALUES 
+('Admin', 'Admin'),
+('Cathy1', 'Cathy1'),
+('Cathy2', 'Cathy1'),
+('Cathy3', 'Cathy1'),
+('Cathy4', 'Cathy1'),
+('Cathy5', 'Cathy1'),
+('Cathy6', 'Cathy1'),
+('Cathy7', 'Cathy1'),
+('Cathy8', 'Cathy1'),
+('Cathy9', 'Cathy1'),
+('Cathy10', 'Cathy1'),
+('Connor1', 'Connor1'),
+('Connor2', 'Connor1'),
+('Connor3', 'Connor1'),
+('Connor4', 'Connor1'),
+('Connor5', 'Connor1'),
+('Connor6', 'Connor1'),
+('Connor7', 'Connor1'),
+('Connor8', 'Connor1'),
+('Connor9', 'Connor1');
 COMMIT;
