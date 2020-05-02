@@ -29,16 +29,19 @@
                                     <!-- Title -->
                                     <h5 class="card-title" name="title">
                                         <%let title = "No Title Available"; %>
-                                        <%if (b.volumeInfo.hasOwnProperty("title")) {%>
-                                            <%title=b.volumeInfo.title;%> 
+                                        <%if (!b.volumeInfo.hasOwnProperty("title")) {%>
+                                            No Title Available
+                                        <%} else if (b.volumeInfo.hasOwnProperty("title") && b.volumeInfo.title.length > 50) {%>
+                                            <%=b.volumeInfo.title.slice(0,50);%>... 
+                                        <%} else {%>
+                                            <%=b.volumeInfo.title%>
                                         <%}%>
-                                        <%=title%>
                                     </h5>
                                     <!-- Description -->
                                     <p class="card-text">
                                         <%let description = "No synopsis available"; %>
                                         <%if (b.volumeInfo.hasOwnProperty("description")) {%>
-                                            <%description=b.volumeInfo.description.split(' ').slice(0, 20).join(' ');%> 
+                                            <%description=b.volumeInfo.description.slice(0, 100);%> 
                                         <%}%>
                                         <%=description%>...
                                     </p>

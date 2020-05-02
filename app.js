@@ -45,6 +45,8 @@ function checkUsername(username){
     return new Promise(function(resolve, reject){
        connection.query(stmt, [username], function(error, results){
            if(error) throw error;
+           else if (!results.length) resolve(false); 
+           else if (results[0].username != username) resolve(false);  
            resolve(results);
        }); 
     });
@@ -54,7 +56,6 @@ function checkPassword(password, hash){
     return new Promise(function(resolve, reject){
        bcrypt.compare(password, hash, function(error, result){
           if(error) throw error;
-          console.log("Result in checkPassword function: ", result);
           resolve(result);
        }); 
     });
@@ -65,7 +66,6 @@ function checkSeededPassword(username, password) {
     return new Promise(function(resolve, reject){
        connection.query(stmt, [password], function(error, results){
            if(error) throw error;
-           console.log("Result in checkSeededPassword: ", results);
            resolve(results);
        }); 
     });
@@ -75,7 +75,6 @@ function checkSeededPassword(username, password) {
 ///////////////////////////// HOME //////////////////////////////////
 app.get("/", async function(req, res){
     let cards = await genCards();
-    console.log("Session user: ", req.session.user);   
     res.render("home.ejs", {user: req.session.user, featured: cards});
 });
 
@@ -96,7 +95,6 @@ function genCards() {
 
 app.post("/backCards", function(req, res) {
     let statement =  'select * from featured_books';
-    console.log("Card1 value: ", req.body.card1);
     connection.query(statement, function(error, found){
 	    if(error) throw error;
 	    if(found.length){
@@ -116,7 +114,6 @@ app.post("/backCards", function(req, res) {
 
 app.post("/forwardCards", function(req, res) {
     let statement =  'select * from featured_books';
-    console.log("Card1 value: ", req.body.card1);
     connection.query(statement, function(error, found){
 	    if(error) throw error;
 	    if(found.length){
@@ -124,10 +121,6 @@ app.post("/forwardCards", function(req, res) {
 	        let card1 = req.body.card1;
 	        found.forEach(function(item, index){
 	           if(item.title == card1){
-	               console.log(found.length);
-	               console.log((index-1).mod(found.length));
-	               console.log((index-2).mod(found.length));
-	               console.log((index-3).mod(found.length));
     	           cards[0] = found[(index-1).mod(found.length)];
     	           cards[1] = found[(index-2).mod(found.length)];
     	           cards[2] = found[(index-3).mod(found.length)];
@@ -150,11 +143,13 @@ app.get("/login", function(req, res){
 
 app.post('/loginSession', async function(req, res){
     let userExists = await checkUsername(req.body.username);
+    if (!userExists) {
+        res.render('login.ejs', {error: true, user: req.session.user});
+    } 
     let hashedPassword = userExists.length > 0 ? userExists[0].password : '';
     let passwordMatch = await checkPassword(req.body.password, hashedPassword);
     let seededPasswordExist= await checkSeededPassword(req.body.username, req.body.password);
     let seededPasswordMatch = seededPasswordExist.length > 0 ? true: false;  
-    console.log("Passowrds match results: ", passwordMatch);
 	if(passwordMatch || seededPasswordMatch){
 	    req.session.authenticated = true;
 	    req.session.user = userExists[0].username;
@@ -167,7 +162,6 @@ app.post('/loginSession', async function(req, res){
 app.post('/register', function(req, res){
     let salt = 10;
     if (req.body.password == req.body.confirmPassword){
-        console.log("Registered with:", req.body.username, req.body.password);
         bcrypt.hash(req.body.password, salt, function(error, hash){
             if(error) throw error;
             let stmt = 'INSERT INTO users (username, password, admin) VALUES (?, ?, ?)';
@@ -175,7 +169,6 @@ app.post('/register', function(req, res){
             connection.query(stmt, data, function(error, result){
                 if(error && error.errno == 1062){
                     //catch duplicate username error
-                    console.log(error.errno);
                     res.render('signup.ejs', {error: true, user: req.session.user});
                 } else {
                    res.render('login.ejs', {error: false, user: req.session.user});
@@ -206,16 +199,10 @@ app.get("/results", async function(req, res){
 // 
 app.get("/results/:ISBN", async function(req, res){
     let results = await getResults('q=isbn:'+req.params.ISBN);
-    // console.log(results);
     let book =  await getBookInfo(results.items[0]); 
-    // console.log(JSON.stringify(book));
-    // console.log(book);
     let reviews = await getReviews(req.params.ISBN); 
-    // console.log(reviews);
     let usersWhoLeftReviews = await checkUserReviews(req.params.ISBN, req.session.user); 
     let hasUserLeftReview = usersWhoLeftReviews.length > 0 ? true: false; 
-    console.log("Who left a review? = " + usersWhoLeftReviews);
-    console.log("user = " + req.session.user);
     res.render("singleResult.ejs", {
                     book: book, 
                     ISBN: req.params.ISBN, 
@@ -227,16 +214,12 @@ app.get("/results/:ISBN", async function(req, res){
 });
 
 app.post("/review/:ISBN", async function(req, res) {
-    console.log(req.body.newReview);
     let datetime = moment().format(); 
-    console.log(req.body);
-    console.log("Calling add review, req has user: ", req.session.user);
     await addReview(req, datetime);
     res.redirect("/results/" + req.params.ISBN); 
 }); 
 
 app.put("/review/:ISBN", async function(req, res) {
-    console.log(req.body); 
     await editReview(req);
     res.json ({
         OK: "OK"
@@ -266,7 +249,6 @@ function getBookInfo(result) {
     let isbn10 = "No ISBN_10 available"; 
     let isbn13 = "No ISBN_13 available";
     
-    console.log("fine"); 
     let book = {
         cover: cover, 
         title: title, 
@@ -317,7 +299,6 @@ function getBookInfo(result) {
         book.isbn13 = isbns[1].identifier; 
     }
     
-    console.log(JSON.stringify(book));
     return new Promise(function(resolve, reject) {
         if (true) {
             resolve(book); 
@@ -357,21 +338,15 @@ function getParameters(req) {
     if (! (flag1 || flag2 || flag3) ) {
         params += '\'\'';
     }
-    console.log(params);
     return params;
 } //getParameters
 
 function getResults(params) {
     let URL = 'https://www.googleapis.com/books/v1/volumes?'; 
-    // let PARAMS = getParameters(req); 
-    // console.log(PARAMS);
     return new Promise(function(resolve, reject) {
         request(URL + params, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 let parsedData = JSON.parse(body);
-                // console.log("parameters: " + params);
-                // console.log("SUCCESS"); 
-                // console.log(parsedData);
                 resolve(parsedData);
             } else {
                 reject(error); 

@@ -18,12 +18,12 @@
             <div><strong>ISBN 13:</strong> <%=book.isbn13%></div>
         </div>
     </div>
-    <div class="d-flex justify-content-center">
+    <div class="col-md-8 offset-md-2 d-flex justify-content-center">
         <%=book.synopsis%>
     </div>
 </div>
 <hr>
-<div class="container">
+<div class="container col-md-8 offset-md-2">
     <h2 class="text-center"><strong>Reviews</strong></h2>
     <div id="reviews" class="pb-4 pt-2 reviews">
         <%reviews.forEach(function(review) {%>
@@ -64,6 +64,7 @@
     </div>
 
     <!--only show textbox if user has logged in AND has not left a review-->
+    <%console.log("user = " + user + " hasUserLeftReview = " + hasUserLeftReview);%> 
     <%if (user && user != "Admin" && !hasUserLeftReview) {%>
         <form id="reviewForm" action="/review/<%=ISBN%>" method="POST" onclick="return !hasExceededCharLimit('#newReview','#charsLeft');">
             <!--<input type="hidden" id="isbn" value="<%=ISBN%>">-->

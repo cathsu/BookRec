@@ -1,5 +1,4 @@
 $("#editBtn").on("click", function(){
-    console.log("Editing!");
     let user = $(this).parent().parent().attr("id"); 
     let userReview =  $("#" + user + ' > #review'); 
     let editedReviewArea = $("#" + user + ' > #editedReviewArea');
@@ -101,23 +100,26 @@ $("#newReview").on("keyup", function () {
 }); 
 
 function hasExceededCharLimit(review, msg) {
-    const MAX_CHARS = 10; 
+    const MAX_CHARS = 500; 
     let currentLength = $(review).val().length; 
     console.log(currentLength); 
     let charsLeft = MAX_CHARS-currentLength; 
+    
     if (charsLeft == 0) {
+        $(msg).css('color', 'red');
         $(msg).text("You've reached the limit!");
         return false; 
-    } else if (charsLeft < 0) {
+    } else if (charsLeft > 0) {
+        $(msg).css('color', 'black');
+        $(msg).text("You have " + charsLeft + " characters left!");
+        return false;
+    } 
+    else {
+        $(msg).css('color', 'red');
         let charsOver = currentLength - MAX_CHARS; 
         $(msg).text("You've gone " + charsOver + " characters over the limit!");
         return true;
-    } else {
-        $(msg).text("You have " + charsLeft + " characters left!");
-        return false;
-    }
-    
-    
+    } 
 }
 
 
