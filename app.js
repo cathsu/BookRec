@@ -406,7 +406,7 @@ function editReview(req) {
 function deleteReview(req) {
     let stmt = 'DELETE from reviews ' +
                 'WHERE ISBN = ? and username = ?'; 
-    let data = [req.body.isbn, req.session.user];
+    let data = [req.body.isbn, req.body.username];
     return new Promise((resolve, reject) => {
         connection.query(stmt, data, (error, results) =>{
             if(error) throw error;

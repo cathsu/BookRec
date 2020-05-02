@@ -78,7 +78,7 @@ $("#editBtn").on("click", function(){
                     console.log("didEditBefore = " + didEditBefore);
                     console.log($("#" + user + "> #edit").text());
                     if (!didEditBefore) {
-                        $("#" + user + "> #edit").text("(Edited)"); 
+                        $("#" + user + "> #edit").html("<i>(Edited)</i>"); 
                     }
 
                     
@@ -128,6 +128,7 @@ function hasExceededCharLimit(review, msg) {
 $("#deleteBtn").on("click", function(){
     console.log("Deleting!");
     let user = $(this).parent().parent().attr("id"); 
+    console.log("user = " + user);
     let isbn = $("#" + user + " > #isbn").val();
     $.ajax({
             method: "DELETE",
