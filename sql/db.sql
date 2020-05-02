@@ -67,13 +67,13 @@ INSERT INTO `users` (`username`, `password`, `admin`) VALUES
 ('Cathy8', 'Cathy1', 1),
 ('Cathy9', 'Cathy1', 1),
 ('Cathy10', 'Cathy1', 1),
-('Cathy11', 'Cathy1', 1),
-('Cathy12', 'Cathy1', 1),
-('Cathy13', 'Cathy1', 1),
-('Cathy14', 'Cathy1', 1),
-('Cathy15', 'Cathy1', 1),
-('Cathy16', 'Cathy1', 1),
-('Cathy17', 'Cathy1', 1),
-('Cathy18', 'Cathy1', 1),
-('Cathy19', 'Cathy1', 1);
+('Connor1', 'Connor1', 1),
+('Connor2', 'Connor1', 1),
+('Connor3', 'Connor1', 1),
+('Connor4', 'Connor1', 1),
+('Connor5', 'Connor1', 1),
+('Connor6', 'Connor1', 1),
+('Connor7', 'Connor1', 1),
+('Connor8', 'Connor1', 1),
+('Connor9', 'Connor1', 1);
 COMMIT;
