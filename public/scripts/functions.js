@@ -197,13 +197,13 @@ function toggleButtons(bool) {
 // }); 
 
 
-$("#forward").on("click", () => {
+$("#back").on("click", () => {
     $.ajax({
         url: "/forwardCards",
         type: "POST",
         dataType: "JSON",
         data: {
-            "card1":$(".card1 > .card-body > .card-title").text()
+            "card3":$(".card3 > .card-body > .card-title").text()
         },
         success: function(data, status){
             console.log(data);
@@ -231,7 +231,7 @@ $("#forward").on("click", () => {
     })
 });
 
-$("#back").on("click", () => {
+$("#forward").on("click", () => {
     $.ajax({
         url: "/backCards",
         type: "POST",

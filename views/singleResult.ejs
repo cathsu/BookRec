@@ -52,8 +52,6 @@
                     <i>(Edited)</i>
                 <%}%>
                 </span>
-                
-                
                     <div id="buttons" class="align">
                         <%if (review.username == user) {%>
                             <button id="editBtn" input type="submit" class="btn btn-primary btn-sm">Edit</button>
@@ -70,11 +68,8 @@
     </div>
 
     <!--only show textbox if user has logged in AND has not left a review-->
-    <%console.log("user = " + user + " hasUserLeftReview = " + hasUserLeftReview);%> 
     <%if (user && user != "Admin" && !hasUserLeftReview) {%>
         <form id="reviewForm" action="/review/<%=ISBN%>" method="POST" onclick="return !hasExceededCharLimit('#newReview','#charsLeft');">
-            <!--<input type="hidden" id="isbn" value="<%=ISBN%>">-->
-            <%console.log(user);%>
             <input type="hidden" name="username" value="<%=user%>">
             <div class="form-group">
                 <label for="newReview">Write a review!</label>
