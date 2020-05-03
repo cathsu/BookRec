@@ -217,7 +217,7 @@ app.get("/results/:ISBN", async function(req, res){
 });
 
 app.post("/review/:ISBN", async function(req, res) {
-    let datetime = moment().format(); 
+    let datetime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
     await addReview(req, datetime);
     res.redirect("/results/" + req.params.ISBN); 
 }); 
