@@ -118,9 +118,9 @@ app.post("/forwardCards", function(req, res) {
 	    if(error) throw error;
 	    if(found.length){
 	        let cards = [];
-	        let card1 = req.body.card1;
+	        let card3 = req.body.card3;
 	        found.forEach(function(item, index){
-	           if(item.title == card1){
+	           if(item.title == card3){
     	           cards[0] = found[(index-1).mod(found.length)];
     	           cards[1] = found[(index-2).mod(found.length)];
     	           cards[2] = found[(index-3).mod(found.length)];
