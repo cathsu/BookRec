@@ -15,6 +15,8 @@ app.use(express.static("public"));
 
 const databaseUsername = process.env.user;
 const databasePassword = process.env.pass;
+// const db_host = process.env.db_host;
+// const database = process.env.database;
 
 const connection = mysql.createConnection({
     host: 'localhost',
