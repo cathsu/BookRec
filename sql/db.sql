@@ -22,8 +22,6 @@ INSERT INTO `featured_books` (`ISBN`, `title`, `description`, `img`) VALUES
 (9781409077688, 'The Count of Monte Cristo', 'A dramatic tale of adventure, revenge, and romance', 'https://images-na.ssl-images-amazon.com/images/I/41jRw4Gj-lL._SX323_BO1,204,203,200_.jpg'),
 (9788180320996, 'Ulysses','An undisputed modernist classic, which propelled James Joyce to international renown','https://s26162.pcdn.co/wp-content/uploads/2015/06/1922-first-edition-2.jpg'),
 (9780393972832, 'Moby Dick','The story of a man whose obsession pits him against the vast ocean','https://www.mvtimes.com/mvt/uploads/2020/01/DSC_8865892.jpg'),
-(9780582537828, 'A Passage to India','Characterizing the limits of liberal tolerance, good intentions, and good will dealing with common problems that exist between two very different cultures','https://upload.wikimedia.org/wikipedia/en/5/54/APassageToIndia.jpg'),
-(0805207880, 'Stormy Petrel','Tales of the life and work of Maxim Gorky, a classic in proleterian literature','https://images-na.ssl-images-amazon.com/images/I/51RMow91b6L._SX347_BO1,204,203,200_.jpg'),
 (9781101656952, 'Red Sorghum','The acclaimed novel of love and resistance during late 1930s China','https://images-na.ssl-images-amazon.com/images/I/71oaLmAfyuL.jpg'),
 (9780803235830, 'Nadirs','A depiction of life and the violent, oppressive atmosphere of Romania in the mid-20th century.','https://images-na.ssl-images-amazon.com/images/I/71NPJjT6pyL.jpg'),
 (9780802195449, 'A Personal Matter','One of the great short novels of the 20th century','https://images-na.ssl-images-amazon.com/images/I/41O4rD-kZFL.jpg'),
@@ -31,12 +29,13 @@ INSERT INTO `featured_books` (`ISBN`, `title`, `description`, `img`) VALUES
 (9789389440379, 'The Sound and the Fury','Faulkner’s first major novel describes the decay and fall of a social order','https://covers.openlibrary.org/b/id/8292206-L.jpg'),
 (9780345448163, 'The Mists of Avalon','A monumental reimagining of the Arthurian legends','https://m.media-amazon.com/images/I/41II-qq8gpL.jpg'),
 (9780141192451, 'Treasure Island',"A mistress of the inn and her son find a treasure map that leads them to a pirate's fortune.",'https://thediaryoftheliteratureman.files.wordpress.com/2016/02/treasure-island.jpg?w=705'),
-(0795311257, 'Brave New World','One of the BBC’s 100 Novels That Shaped Our World','https://www.penguin.co.uk/content/dam/prh/books/111/1110001/9781784870140.jpg.transform/PRHDesktopWide_small/image.jpg'),
 (9780141198965, 'Frankenstein',"Marie Shelley's Frankenstein gave birth to the modern science fiction novel.",'https://images-na.ssl-images-amazon.com/images/I/41dj%2BxC%2BzWL.jpg'),
 (9781517453145, 'Tao Te Ching','The Tao Te Ching is fundamental to the Taoist school of Chinese philosophy','https://images-na.ssl-images-amazon.com/images/I/516YnkEJD2L._SX331_BO1,204,203,200_.jpg'),
 (9780099511656, 'Beloved','A heartbreaking testimony to the ongoing ravages of slavery','https://www.penguin.co.uk/content/dam/prh/books/103/1032964/9780099511656.jpg.transform/PRHDesktopWide_small/image.jpg'),
-(9780141439846, 'Dracula','A masterpiece of the horror genre, Dracula also probes identity, sanity','https://www.penguin.co.uk/content/dam/prh/books/556/55632/9780141439846.jpg.transform/PRHDesktopWide_small/image.jpg');
-
+(9780141439846, 'Dracula','A masterpiece of the horror genre, Dracula also probes identity, sanity','https://www.penguin.co.uk/content/dam/prh/books/556/55632/9780141439846.jpg.transform/PRHDesktopWide_small/image.jpg'),
+(9780553213133, 'Anne of Green Gables', 'A classic in children’s literature and a heartwarming tale of love, friendship, and found families', 'https://images-na.ssl-images-amazon.com/images/I/51cS+FHLCJL._SX346_BO1,204,203,200_.jpg'), 
+(9780143039433, 'The Grapes of Wrath', 'A realistic depiction of life during the Great Depression in the Dustbowl','https://images-na.ssl-images-amazon.com/images/I/51zdzn8cO3L._SX323_BO1,204,203,200_.jpg'), 
+(9781101158104, 'Lord of the Flies', 'Devoid of adult supervision or rules, boys attempt to forge their own society, failing, however, in the face of terror, sin, and evil.', 'https://images-na.ssl-images-amazon.com/images/I/81WUAoL-wFL.jpg');
 DROP TABLE IF EXISTS `reviews`;
 
 CREATE TABLE `reviews` (
