@@ -13,16 +13,11 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-const databaseUsername = process.env.user;
-const databasePassword = process.env.pass;
-// const db_host = process.env.db_host;
-// const database = process.env.database;
-
 const connection = mysql.createConnection({
-    host: 'un0jueuv2mam78uv.cbetxkdyhwsb.us-east-1.rds.amazonaws.com', //'localhost',
-    user: 'n79faddzcgwlc9y2', //databaseUsername,
-    password: 'rmaw3d7xswece72u',//databasePassword,
-    database: 'zdsrmp00qp1p5j1u' //'bookrec_db'
+    host: 'un0jueuv2mam78uv.cbetxkdyhwsb.us-east-1.rds.amazonaws.com', 
+    user: 'n79faddzcgwlc9y2', 
+    password: 'rmaw3d7xswece72u',
+    database: 'zdsrmp00qp1p5j1u'
 });
 connection.connect();
 
