@@ -19,10 +19,10 @@ const databasePassword = process.env.pass;
 // const database = process.env.database;
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: databaseUsername,
-    password: databasePassword,
-    database: 'bookrec_db'
+    host: 'un0jueuv2mam78uv.cbetxkdyhwsb.us-east-1.rds.amazonaws.com', //'localhost',
+    user: 'n79faddzcgwlc9y2', //databaseUsername,
+    password: 'rmaw3d7xswece72u',//databasePassword,
+    database: 'zdsrmp00qp1p5j1u' //'bookrec_db'
 });
 connection.connect();
 
