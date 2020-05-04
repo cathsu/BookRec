@@ -4,10 +4,12 @@
 ### [Github Repository](https://github.com/cathsu/BookRec)
 ### [Heroku Deployment](https://bookrec-336.herokuapp.com)
 **Team Member Information**  <br><br>
+
 Name: Connor Hale  
 OtterID: hale9103  
 Email Address: cohale@csumb.edu  
 <img src="https://i.imgur.com/N5UN0u9.jpg" alt="alt text" width="100" height="95">
+
 <br>
 
 Name: Cathy Hsu    
@@ -16,15 +18,12 @@ Email Address: chsu@csumb.edu
 
 <img src="https://avatars1.githubusercontent.com/u/45910556?s=400&u=9153a8a4be63a1f5619a6f382efa20421557c4ab&v=4" alt="alt text" width="100" height="100">
 
-
 <br><br><br>
 
 -----
 ## Table of Contents
 * [Running Guide](#running-guide)
 * [Design Notes](#design-notes)
-* Project Notes
-* Additional Info
 <br><br><br>
 
 ### Running Guide
@@ -52,11 +51,3 @@ Admins can delete all user reviews.
   * username: Admin
   * password: Admin
 <br><br><br>
-
-### Project Notes
------
-Coming soon
-<br><br><br>
-### Additional Info
------
-Coming soon
