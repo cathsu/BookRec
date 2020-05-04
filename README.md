@@ -19,13 +19,13 @@ Email Address: cohale@csumb.edu
 
 -----
 ## Table of Contents
-* Running Guide
+* [Running Guide](#running-guide)
 * Design Notes
 * Project Notes
 * Additional Info
 <br><br><br>
 
-### Running  Guide
+### Running Guide
 -----
 git clone https://github.com/cathsu/BookRec.git  
 cd BookRec  
